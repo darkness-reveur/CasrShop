@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "QzsnJc7I+ClAsAIWpH9RWDDwOjSBD616S9H3x6RaQYOvv9IzjvLaoOVaSTbWo/lyPcKhyfoPMocwPIAdGHxaOA==",
+  "dgSpecHash": "KbjcmZez8o+s1WwEZVlTROmMob8UbTQztaalA8yGrucm+Ygkh5YUGXPAictxmcTzThefqBccgqq64rZgcepkow==",
   "success": true,
   "projectFilePath": "D:\\Fork\\EpamCasrShop\\CarShop\\CarShop.Common\\CarShop.Common.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\uvapu\\.nuget\\packages\\microsoft.extensions.logging.abstractions\\5.0.0\\microsoft.extensions.logging.abstractions.5.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

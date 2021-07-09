@@ -13,12 +13,10 @@ namespace CarShop.Infrastructure.Services.Interfacies
 
         Car GetCarById(int id);
 
-        Car GetCarByOrderId(int orderId);
+        Car AddCar(Car newCar);
 
-        void AddCar(Car newCar);
+        Car UpdateCar(Car newCar);
 
-        void UpdateCar(Car newCar);
-
-        void DeleteCar(Car newCar);
+        bool DeleteCar(int carId);
     }
 }
