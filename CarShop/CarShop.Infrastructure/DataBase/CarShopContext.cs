@@ -1,4 +1,5 @@
 ﻿using CarShop.Common.Models;
+using CarShop.Common.Models.AuthenticationModels;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -18,6 +19,8 @@ namespace CarShop.Infrastructure.DataBase
 
         public DbSet<Car> Cars { get; set; }
 
+        public DbSet<Cart> Carts { get; set; }
+
         public DbSet<CarBrand> Brands { get; set; }
 
         public DbSet<CarModel> Models { get; set; }
@@ -25,5 +28,9 @@ namespace CarShop.Infrastructure.DataBase
         public DbSet<Order> Orders { get; set; }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<AccessDataEntity> AccessData { get; set; }
+
+        public DbSet<RegisterData> RegisterDatas { get; set; }
     }
 }

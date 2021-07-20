@@ -1813,6 +1813,33 @@
         "runtime": {
           "lib/netstandard1.3/System.Xml.XmlSerializer.dll": {}
         }
+      },
+      "CarShop.Common/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "Microsoft.Extensions.Logging.Abstractions": "5.0.0"
+        },
+        "compile": {
+          "bin/placeholder/CarShop.Common.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CarShop.Common.dll": {}
+        }
+      },
+      "CarShop.Infrastructure/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v5.0",
+        "dependencies": {
+          "CarShop.Common": "1.0.0",
+          "Microsoft.EntityFrameworkCore": "5.0.7"
+        },
+        "compile": {
+          "bin/placeholder/CarShop.Infrastructure.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/CarShop.Infrastructure.dll": {}
+        }
       }
     }
   },
@@ -6534,10 +6561,21 @@
         "system.xml.xmlserializer.4.3.0.nupkg.sha512",
         "system.xml.xmlserializer.nuspec"
       ]
+    },
+    "CarShop.Common/1.0.0": {
+      "type": "project",
+      "path": "../CarShop.Common/CarShop.Common.csproj",
+      "msbuildProject": "../CarShop.Common/CarShop.Common.csproj"
+    },
+    "CarShop.Infrastructure/1.0.0": {
+      "type": "project",
+      "path": "../CarShop.Infrastructure/CarShop.Infrastructure.csproj",
+      "msbuildProject": "../CarShop.Infrastructure/CarShop.Infrastructure.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net5.0": [
+      "CarShop.Infrastructure >= 1.0.0",
       "Microsoft.AspNetCore.SpaServices.Extensions >= 5.0.7",
       "Microsoft.EntityFrameworkCore >= 5.0.7",
       "Microsoft.EntityFrameworkCore.SqlServer >= 5.0.7",
@@ -6571,7 +6609,11 @@
       "frameworks": {
         "net5.0": {
           "targetAlias": "net5.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "D:\\Fork\\EpamCasrShop\\CarShop\\CarShop.Infrastructure\\CarShop.Infrastructure.csproj": {
+              "projectPath": "D:\\Fork\\EpamCasrShop\\CarShop\\CarShop.Infrastructure\\CarShop.Infrastructure.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

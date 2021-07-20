@@ -2,37 +2,28 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace CarShop.Common.Models
+namespace CarShop.Common.Models.AuthenticationModels
 {
-    public class Order
+    public class AccessDataEntity
     {
         [Key]
         [Required]
         public int Id { get; set; }
 
         [Required]
-        public double TotalAmount { get; set; }
+        public string Login { get; set; }
 
         [Required]
-        public DateTime Date { get; set; }
-
-        [Required]
-        public OrderStatuses OrderStatus { get; set; }
+        public string Password { get; set; }
 
         [Required]
         public int UserId { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
-
-        public virtual List<Car> Cars { get; set; }
-
-        public enum OrderStatuses
-        {
-            Opend,
-            InProgress,
-            Paid
-        }
     }
 }

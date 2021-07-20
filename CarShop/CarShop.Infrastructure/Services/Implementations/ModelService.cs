@@ -16,9 +16,9 @@ namespace CarShop.Infrastructure.Services.Implementations
     {
         private readonly CarShopContext _shopContext;
 
-        private readonly ILogger<CarService> _logger;
+        private readonly ILogger<ModelService> _logger;
 
-        public ModelService(CarShopContext shopContext, ILogger<CarService> logger)
+        public ModelService(CarShopContext shopContext, ILogger<ModelService> logger)
         {
             _logger = logger;
             _shopContext = shopContext;
@@ -60,11 +60,6 @@ namespace CarShop.Infrastructure.Services.Implementations
 
         public bool DeleteCarModel(int modelId)
         {
-            if (modelId == 0)
-            {
-                return false;
-            }
-
             try
             {
                 var exModel = _shopContext.Models
@@ -89,8 +84,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                 return false;
             }
         }
-
-        
+            
         public IEnumerable<CarModel> GetAllCarModels()
         {
             try
@@ -106,7 +100,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                 _logger.LogErrorByTemplate(
                     nameof(ModelService),
                     nameof(GetAllCarModels),
-                    $"Cannot get data from database ",
+                    $"Cannot get datas about CarModels from database ",
                     ex);
 
                 return null;
@@ -128,6 +122,7 @@ namespace CarShop.Infrastructure.Services.Implementations
 
                 _shopContext.SaveChanges();
 
+                return exModel;
             }
             catch (Exception ex)
             {
@@ -139,9 +134,6 @@ namespace CarShop.Infrastructure.Services.Implementations
 
                 return null;
             }
-            throw new NotImplementedException();
         }
-
-
     }
 }

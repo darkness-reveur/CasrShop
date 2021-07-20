@@ -27,9 +27,9 @@ namespace CarShop.Infrastructure.Services.Implementations
             try
             {
                 var Cars = _shopContext.Cars
-                    .Include(item => item.CarModel)
-                    .ThenInclude(item => item.CarBrand)
-                    .Where(item => item.OrderId == null)
+                    .Include(car => car.User)
+                    .Include(car => car.CarModel)
+                    .ThenInclude(model => model.CarBrand)
                     .ToList();
 
                 return Cars;
@@ -54,27 +54,24 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
             try
             {
-                var car = _shopContext.Cars
+                var existinCar = _shopContext.Cars
                     .FirstOrDefault(car => car.UserId == newCar.UserId
                     && car.VehicleMileage == newCar.VehicleMileage
                     && car.Description == newCar.Description
-                    && car.CarModelId == newCar.CarModelId);
+                    && car.CarModelId == newCar.CarModelId
+                    && car.ReleaseYear == newCar.ReleaseYear
+                    && car.Price == newCar.Price
+                    && car.WheelDrive == newCar.WheelDrive
+                    && car.EngineType == newCar.EngineType
+                    && car.EngineVolume == newCar.EngineVolume);
 
-                if (car is null)
+                if (existinCar is null)
                 {
                     _shopContext.Cars
                         .Add(newCar);
 
                     _shopContext.SaveChanges();
                 }
-
-                //var exCar = _shopContext.Cars
-                //    .Include(car => car.CarModel)
-                //    .ThenInclude(model => model.CarBrand)
-                //    .FirstOrDefault(car => car.UserId == newCar.UserId
-                //    && car.VehicleMileage == newCar.VehicleMileage
-                //    && car.Description == newCar.Description
-                //    && car.CarModelId == newCar.CarModelId);
 
                 return newCar;
             }
@@ -156,10 +153,12 @@ namespace CarShop.Infrastructure.Services.Implementations
                     exCar.CarModelId = newCar.CarModelId;
                     exCar.Description = newCar.Description;
                     exCar.EngineVolume = newCar.EngineVolume;
-                    exCar.OrderId = newCar.OrderId;
                     exCar.Price = newCar.Price;
                     exCar.ReleaseYear = newCar.ReleaseYear;
                     exCar.VehicleMileage = newCar.VehicleMileage;
+                    exCar.EngineVolume = newCar.EngineVolume;
+                    exCar.WheelDrive = newCar.WheelDrive;
+                    exCar.EngineType = newCar.EngineType;
                 }
 
                 _shopContext.SaveChanges();
