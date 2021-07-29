@@ -166,20 +166,20 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
             try
             {
-                var helperUserWithTheCart = await _shopContext.Users
+                var helperUserWithCart = await _shopContext.Users
                     .Include(user => user.Cart)
                         .ThenInclude(cart => cart.Cars)
                     .FirstOrDefaultAsync(user => user.Id == userId);
 
-                var carInCart = helperUserWithTheCart.Cart.Cars
+                var carInCart = helperUserWithCart.Cart.Cars
                     .FirstOrDefault(car => car.Id == newCarId);
 
                 if (carInCart is null)
                 {
                     return false;
                 }
-
-                helperUserWithTheCart.Cart.Cars.Remove(carInCart);
+                // нужно сделать в юзер контроллере удаление машины из карзины если этот метод правильный
+                helperUserWithCart.Cart.Cars.Remove(carInCart);
 
                 await _shopContext.SaveChangesAsync();
 

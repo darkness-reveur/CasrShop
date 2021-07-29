@@ -82,5 +82,41 @@ namespace CarShop.Controllers
                 await _userService.UpdateAsync(user);
             }
         }
+
+        public async Task<IActionResult> GetCartForUser()
+        {
+            var userIdString = User.FindFirst("userid")?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest();
+            }
+
+            var user = await _userService
+                .GetUserByIdAsync(userId);
+
+            var cart = await _cartService
+                .GetCartByIdAsync(user.CartId);
+            if (cart is null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(cart);
+        }
+
+        public async Task<IActionResult> AddCarForCart(int carId)
+        {
+            var userIdString = User.FindFirst("userid")?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _cartService.AddNewCarInCartAsync(carId, userId));
+        }
+
+
     }
 }

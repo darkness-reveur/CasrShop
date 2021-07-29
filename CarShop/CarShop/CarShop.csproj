@@ -32,7 +32,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\CarShop.Common\CarShop.Common.csproj" />
     <ProjectReference Include="..\CarShop.Infrastructure\CarShop.Infrastructure.csproj" />
   </ItemGroup>
 

@@ -14,12 +14,20 @@ import { BrandService } from './services/brand.service';
 import { UserService } from './services/user.service';
 import { CartService } from './services/cart.service';
 import { MaterialModule } from './material.module';
+import { NavBarComponent } from './components/nav-bar/nav-bar/nav-bar.component';
+import { ProfileComponent } from './components/profile/profile/profile.component';
+import { HomeComponent } from './components/home/home.component';
+import { ProductDetailsComponent } from './components/product-details/product-details.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     RegisterComponent,
+    NavBarComponent,
+    ProfileComponent,
+    HomeComponent,
+    ProductDetailsComponent,
 
   ],
   imports: [

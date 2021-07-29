@@ -16,13 +16,17 @@ namespace CarShop.Infrastructure.Services.Implementations
     {
         private readonly CarShopContext _carShopContext;
 
+        private readonly ICartService _cartService;
+
         private readonly ILogger<UserService> _logger;
 
         public UserService(
             CarShopContext carShopContext,
+            ICartService cartService,
             ILogger<UserService> logger)
         {
             _carShopContext = carShopContext;
+            _cartService = cartService;
             _logger = logger;
         }
 
@@ -36,17 +40,22 @@ namespace CarShop.Infrastructure.Services.Implementations
             try
             {
                 var exUser = await _carShopContext.Users
+                    .Include(user => user.Cart)
                     .FirstOrDefaultAsync(user => user.MobilePhoneNumber == newUser.MobilePhoneNumber
-                    || user.Email == newUser.Email);
+                        || user.Email == newUser.Email);
                 
-                if (!(exUser is null))
+                if (exUser is null)
                 {
+                    newUser.Cart = new Cart();
+
                     await _carShopContext.Users.AddAsync(newUser);
+
+                    //await _cartService.AddCartAsync(newUser.Cart);
 
                     await _carShopContext.SaveChangesAsync();
                 }
 
-                return newUser;
+                return exUser;
             }
             catch (Exception ex)
             {
