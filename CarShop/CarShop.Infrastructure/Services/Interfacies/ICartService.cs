@@ -9,16 +9,16 @@ namespace CarShop.Infrastructure.Services.Interfacies
 {
     public interface ICartService
     {
-        IEnumerable<Cart> GetAllCart();
+        Task<IEnumerable<Cart>> GetAllCartAsync();
 
-        Cart AddCart(Cart newCart);
+        Task<Cart> AddCartAsync(Cart newCart);
 
-        public Cart GetCartById(int cartId);
+        Task<Cart> GetCartByIdAsync(int cartId);
 
-        Cart AddNewCarInCart(int newCarId, int userId);
+        Task<Cart> AddNewCarInCartAsync(int newCarId, int userId);
 
-        bool DeleteCarOutCart(int carId, int cartId);
+        Task<bool> DeleteCarOutCartAsync(int carId, int cartId);
 
-        bool DeleteCart(int basketId);
+        Task<bool> DeleteCartAsync(int basketId);
     }
 }

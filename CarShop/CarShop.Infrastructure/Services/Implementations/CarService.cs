@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CarShop.Infrastructure.Services.Implementations
 {
@@ -22,15 +23,15 @@ namespace CarShop.Infrastructure.Services.Implementations
             _shopContext = shopContext;
         }
 
-        public IEnumerable<Car> GetAllCars()
+        public async Task<IEnumerable<Car>> GetAllCarsAsync()
         {
             try
             {
-                var Cars = _shopContext.Cars
+                var Cars = await _shopContext.Cars
                     .Include(car => car.User)
                     .Include(car => car.CarModel)
                     .ThenInclude(model => model.CarBrand)
-                    .ToList();
+                    .ToListAsync();
 
                 return Cars;
             }
@@ -38,7 +39,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(CarService),
-                    nameof(GetAllCars),
+                    nameof(GetAllCarsAsync),
                     $"Cannot get data from database",
                     ex);
 
@@ -46,7 +47,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public Car AddCar(Car newCar)
+        public async Task<Car> AddCarAsync(Car newCar)
         {
             if (newCar.Id != 0)
             {
@@ -54,8 +55,8 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
             try
             {
-                var existinCar = _shopContext.Cars
-                    .FirstOrDefault(car => car.UserId == newCar.UserId
+                var existinCar = await _shopContext.Cars
+                    .FirstOrDefaultAsync(car => car.UserId == newCar.UserId
                     && car.VehicleMileage == newCar.VehicleMileage
                     && car.Description == newCar.Description
                     && car.CarModelId == newCar.CarModelId
@@ -67,10 +68,10 @@ namespace CarShop.Infrastructure.Services.Implementations
 
                 if (existinCar is null)
                 {
-                    _shopContext.Cars
-                        .Add(newCar);
+                    await _shopContext.Cars
+                        .AddAsync(newCar);
 
-                    _shopContext.SaveChanges();
+                    await _shopContext.SaveChangesAsync();
                 }
 
                 return newCar;
@@ -79,15 +80,16 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(CarService),
-                    nameof(AddCar),
-                    $"Failed to add new car: {newCar.CarModel.CarBrand} {newCar.CarModel} {newCar.ReleaseYear}",
+                    nameof(AddCarAsync),
+                    $"Failed to add new car: {newCar.CarModel.CarBrand} {newCar.CarModel} {newCar.ReleaseYear}" +
+                    $"\n{newCar.User.Name} {newCar.User.Email} Trying to add car",
                     ex);
 
                 return null;
             }
         }
 
-        public bool DeleteCar(int carId)
+        public async Task<bool> DeleteCarAsync(int carId)
         {
             if (carId == 0)
             {
@@ -96,20 +98,20 @@ namespace CarShop.Infrastructure.Services.Implementations
 
             try
             {
-                var exCar = _shopContext.Cars
+                var exCar = await _shopContext.Cars
                     .AsNoTracking()
-                    .FirstOrDefault(car => car.Id == carId);
+                    .FirstOrDefaultAsync(car => car.Id == carId);
 
                 _shopContext.Cars.Remove(exCar);
 
-                _shopContext.SaveChanges();
+                await _shopContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
                 _logger.LogErrorByTemplate(
                     nameof(CarService),
-                    nameof(DeleteCar),
+                    nameof(DeleteCarAsync),
                     $"Failed to delete car with Id: {carId} ",
                     ex);
 
@@ -117,15 +119,15 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public Car GetCarById(int id)
+        public async Task<Car> GetCarByIdAsync(int id)
         {
             try
             {
-                var car = _shopContext.Cars
+                var car = await _shopContext.Cars
                     .Include(car => car.CarModel)
                     .ThenInclude(model => model.CarBrand)
                     .Include(car => car.User)
-                    .FirstOrDefault(car => car.Id == id);
+                    .FirstOrDefaultAsync(car => car.Id == id);
 
                 return car;
             }
@@ -133,7 +135,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(CarService),
-                    nameof(GetCarById),
+                    nameof(GetCarByIdAsync),
                     $"Cannot get car with Id: {id} ",
                     ex);
 
@@ -141,12 +143,12 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public Car UpdateCar(Car newCar)
+        public async Task<Car> UpdateCarAsync(Car newCar)
         {
             try
             {
-                var exCar = _shopContext.Cars
-                    .FirstOrDefault(car => car.Id == newCar.Id);
+                var exCar = await _shopContext.Cars
+                    .FirstOrDefaultAsync(car => car.Id == newCar.Id);
 
                 if (!(exCar is null))
                 {
@@ -161,7 +163,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                     exCar.EngineType = newCar.EngineType;
                 }
 
-                _shopContext.SaveChanges();
+                await _shopContext.SaveChangesAsync();
 
                 return exCar;
             }
@@ -169,7 +171,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(CarService),
-                    nameof(UpdateCar),
+                    nameof(UpdateCarAsync),
                     $"Failed to update new car: {newCar.CarModel.CarBrand} {newCar.CarModel} {newCar.ReleaseYear}",
                     ex);
 

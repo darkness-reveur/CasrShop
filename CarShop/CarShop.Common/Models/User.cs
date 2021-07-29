@@ -27,7 +27,7 @@ namespace CarShop.Common.Models
         public UserRoles Role { get; set; }
 
         [Required]
-        public int MobilePhoneNumber { get; set; }
+        public string MobilePhoneNumber { get; set; }
 
         public virtual List<Order> Orders { get; set; }
 
@@ -35,8 +35,6 @@ namespace CarShop.Common.Models
 
         [ForeignKey("CarId")]
         public virtual Car Car { get; set; }
-
-        public virtual Order[] Ordes { get; set; }
 
         public int CartId { get; set; }
 

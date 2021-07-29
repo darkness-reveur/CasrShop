@@ -26,7 +26,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             _logger = logger;
         }
 
-        public User Add(User newUser)   
+        public async Task<User> AddAsync(User newUser)   
         {
             if (newUser is null)
             {
@@ -35,15 +35,15 @@ namespace CarShop.Infrastructure.Services.Implementations
 
             try
             {
-                var exUser = _carShopContext.Users
-                    .FirstOrDefault(user => user.MobilePhoneNumber == newUser.MobilePhoneNumber
+                var exUser = await _carShopContext.Users
+                    .FirstOrDefaultAsync(user => user.MobilePhoneNumber == newUser.MobilePhoneNumber
                     || user.Email == newUser.Email);
                 
                 if (!(exUser is null))
                 {
-                    _carShopContext.Users.Add(newUser);
+                    await _carShopContext.Users.AddAsync(newUser);
 
-                    _carShopContext.SaveChanges();
+                    await _carShopContext.SaveChangesAsync();
                 }
 
                 return newUser;
@@ -52,7 +52,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                    nameof(UserService),
-                   nameof(_carShopContext),
+                   nameof(AddAsync),
                    $"Failed to add user with email={newUser.Email}",
                    ex);
 
@@ -60,17 +60,17 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public List<User> GetAll()
+        public async Task<List<User>> GetAllAsync()
         {
             try
             {
-                var users = _carShopContext.Users
-                    .Include(user => user.Order)
+                var users = await _carShopContext.Users
+                    .Include(user => user.Orders)
                         .ThenInclude(order => order.Cars)
                     .Include(user => user.Cart)
                         .ThenInclude(cart => cart.Cars)
                     .Include(user => user.Car)
-                    .ToList();
+                    .ToListAsync();
 
                 return users;
             }
@@ -78,7 +78,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(UserService),
-                    nameof(GetAll),
+                    nameof(GetAllAsync),
                     $"Cannot get data from database",
                     ex);
 
@@ -86,17 +86,17 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public User GetUserById(int userId)
+        public async Task<User> GetUserByIdAsync(int userId)
         {
             try
             {
-                var user = _carShopContext.Users
-                    .Include(user => user.Order)
+                var user = await _carShopContext.Users
+                    .Include(user => user.Orders)
                         .ThenInclude(order => order.Cars)
                     .Include(user => user.Cart)
                         .ThenInclude(cart => cart.Cars)
                     .Include(user => user.Car)
-                    .FirstOrDefault();
+                    .FirstOrDefaultAsync();
 
 
                 return user;
@@ -105,7 +105,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(UserService),
-                    nameof(GetUserById),
+                    nameof(GetUserByIdAsync),
                     $"Cannot get user with id={userId}",
                     ex);
 
@@ -113,12 +113,12 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public User Update(User newUser)
+        public async Task<User> UpdateAsync(User newUser)
         {
             try
             {
-                var exUser = _carShopContext.Users
-                    .FirstOrDefault(user => user.Id == newUser.Id);
+                var exUser = await _carShopContext.Users
+                    .FirstOrDefaultAsync(user => user.Id == newUser.Id);
 
                 if (!(exUser is null))
                 {
@@ -128,7 +128,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                     exUser.Age = newUser.Age;
                     exUser.Role = newUser.Role;
 
-                    _carShopContext.SaveChanges();
+                    await _carShopContext.SaveChangesAsync();
                 }
 
                 return exUser;
@@ -137,7 +137,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                   nameof(UserService),
-                  nameof(Update),
+                  nameof(UpdateAsync),
                   $"Failed to update user with email={newUser.Email}",
                   ex);
 

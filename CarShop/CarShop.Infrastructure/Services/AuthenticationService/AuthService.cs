@@ -3,6 +3,7 @@ using CarShop.Common.Models;
 using CarShop.Common.Models.AuthenticationModels;
 using CarShop.Infrastructure.DataBase;
 using CarShop.Infrastructure.Services.Interfacies;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -31,14 +32,14 @@ namespace CarShop.Infrastructure.Services.AuthenticationService
             _userService = userService;
         }
 
-        public bool IsLoginFree(string login)
+        public async Task<bool> IsLoginFree(string login)
         {
             string hashedLogin = GetHashedValue(login);
 
             try
             {
-                var users = _carShopContext.AccessData
-                    .ToList();
+                var users = await _carShopContext.AccessData
+                    .ToListAsync();
 
                 var accessData = users.FirstOrDefault(data => AreHashStringEquals(
                     data.Login,
@@ -61,7 +62,7 @@ namespace CarShop.Infrastructure.Services.AuthenticationService
             return false;
         }
 
-        public User LogIn(string login, string password)
+        public async Task<User> LogIn(string login, string password)
         {
             string hashedLogin = GetHashedValue(login);
 
@@ -75,14 +76,14 @@ namespace CarShop.Infrastructure.Services.AuthenticationService
 
                 if (AreHashStringEquals(hashedPassword, accessData.Password))
                 {
-                    return  _userService.GetUserById(accessData.UserId);
+                    return  await _userService.GetUserByIdAsync(accessData.UserId);
                 }
             }
 
             return null;
         }
 
-        public void Register(string login, string password, User user)
+        public async Task Register(string login, string password, User user)
         {
             string hashedLogin = GetHashedValue(login);
 
@@ -98,10 +99,10 @@ namespace CarShop.Infrastructure.Services.AuthenticationService
                     User = user
                 };
 
-                _carShopContext.AccessData
-                    .Add(accessData);
+                await _carShopContext.AccessData
+                    .AddAsync(accessData);
 
-                _carShopContext.SaveChangesAsync();
+                await _carShopContext.SaveChangesAsync();
             }
             catch (Exception ex)
             {
@@ -132,7 +133,7 @@ namespace CarShop.Infrastructure.Services.AuthenticationService
         {
             bool areTheyEqual = false;
 
-            if (firstValue.Length == firstValue.Length)
+            if (firstValue.Length == secondValue.Length)
             {
                 int i = 0;
 

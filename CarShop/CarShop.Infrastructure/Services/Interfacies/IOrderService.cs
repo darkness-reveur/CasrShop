@@ -9,22 +9,14 @@ namespace CarShop.Infrastructure.Services.Interfacies
 {
     public interface IOrderService
     {
-        public IEnumerable<Order> GetAllOrders();
+        public Task<IEnumerable<Order>> GetAllOrdersAsync();
 
-        public Order GetOrderById(int orderId);
+        public Task<Order> GetOrderByIdAsync(int orderId);
 
-        public Order AddNewOrder(Order newOrder);
+        public Task<Order> CreateOrderAsync(int cartId);
 
-        public Cart AddCarToCard(
-            int carId,
-            int userId);
+        public Task<Order> ApproveOrderAsync(int orderId);
 
-        public Order UpdateOrder(Order newOrder);
-
-        public bool DeleteOrderDyId(int orderId); 
-        
-        public bool DeleteCarOutCard(
-             int carId,
-             int userId);
+        public Task<bool> DeleteOrderDyIdAsync(int orderId); 
     }
 }

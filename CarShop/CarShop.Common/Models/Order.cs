@@ -30,7 +30,6 @@ namespace CarShop.Common.Models
 
         public enum OrderStatuses
         {
-            Opend,
             InProgress,
             Paid
         }

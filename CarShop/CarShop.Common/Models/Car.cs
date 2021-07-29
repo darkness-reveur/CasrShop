@@ -23,8 +23,8 @@ namespace CarShop.Common.Models
 
         public string Description { get; set; }
 
-        [Required]
-        public string[] PictureLinks { get; set; }
+        //[Required]
+        //public string[] PictureLinks { get; set; }
 
         [Required]
         public WheelDrives WheelDrive { get; set; }

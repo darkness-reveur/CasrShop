@@ -1,4 +1,5 @@
 ﻿using CarShop.Common.Helpers;
+using CarShop.Common.Models;
 using CarShop.Common.Models.AuthenticationModels;
 using CarShop.Infrastructure.Services.AuthenticationService;
 using CarShop.Infrastructure.Services.Interfacies;
@@ -38,33 +39,33 @@ namespace CarShop.Controllers
 
         [HttpGet]
         [Route("IsLoginFree/{login}")]
-        public ActionResult<bool> IsLoginFree(string login)
+        public async Task<IActionResult> IsLoginFree(string login)
         {
             if (login == null)
             {
                 return BadRequest();
             }
 
-            return _authService
-                .IsLoginFree(login);
+            return Ok(await _authService
+                .IsLoginFree(login));
         }
 
         [HttpPut]
-        public ActionResult<bool> LogIn([FromBody] AccessDataEntity data)
+        public async Task<IActionResult> LogInAsync([FromBody] AccessDataEntity data)
         {
             if (data.Login == null
                 && data.Password == null)
             {
                 _logger.LogErrorByTemplate(
                     nameof(AuthController),
-                    nameof(LogIn),
+                    nameof(LogInAsync),
                     $"Got an error. Login={data.Login} | Password={data.Password}",
                     new ArgumentNullException());
 
                 return Ok(false);
             }
 
-            var user = _authService.LogIn(
+            var user = await _authService.LogIn(
                     data.Login,
                     data.Password);
 
@@ -72,22 +73,22 @@ namespace CarShop.Controllers
             {
                 _logger.LogWarning("Login data was incorrect");
 
-                return false;
+                return Ok(false);
             }
 
-             Authenticate(
+             await Authenticate(
                 user.Id.ToString(),
                 user.Role);
 
             _logger.LogInfo(
                 nameof(AuthController),
-                nameof(LogIn),
+                nameof(LogInAsync),
                 $"User {user.Id} has been authenticated");
 
             return Ok(true);
         }
 
-        private void Authenticate(
+        private async Task Authenticate(
             string userId,
             UserRoles userRole)
         {
@@ -108,13 +109,13 @@ namespace CarShop.Controllers
                 ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);
 
-             HttpContext.SignInAsync(
+             await HttpContext.SignInAsync(
                 CookieAuthenticationDefaults.AuthenticationScheme,
                 new ClaimsPrincipal(identity));
         }
 
         [HttpPost]
-        public ActionResult<bool> Register([FromBody] RegisterData data)
+        public async Task<IActionResult> RegisterAsync([FromBody] RegisterData data)
         {
             if (data.Login == null
                 || data.Password == null
@@ -122,7 +123,7 @@ namespace CarShop.Controllers
             {
                 _logger.LogErrorByTemplate(
                     nameof(AuthController),
-                    nameof(Register),
+                    nameof(RegisterAsync),
                     $"Got an error. Login={!(data.Login is null)} " +
                         $"| Password={!(data.Password is null)} " +
                         $"| User={!(data.User is null)}",
@@ -133,15 +134,15 @@ namespace CarShop.Controllers
 
             try
             {
-                var user = _userService
-                    .Add(data.User);
+                var user = await _userService
+                    .AddAsync(data.User);
 
-                _authService.Register(
+                await _authService.Register(
                     data.Login,
                     data.Password,
                     user);
 
-                Authenticate(
+                await Authenticate(
                     user.Id.ToString(),
                     user.Role);
 
@@ -151,11 +152,11 @@ namespace CarShop.Controllers
             {
                 _logger.LogErrorByTemplate(
                     nameof(AuthController),
-                    nameof(Register),
+                    nameof(RegisterAsync),
                     $"Authentication error",
                     ex);
 
-                return false;
+                return BadRequest();
             }
         }
     }

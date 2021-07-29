@@ -3,19 +3,20 @@ using CarShop.Infrastructure.Services.Interfacies;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CarShop.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CarController : ControllerBase
+    public class ProductController : ControllerBase
     {
-        private readonly ILogger<CarController> _logger;
+        private readonly ILogger<ProductController> _logger;
 
         private readonly ICarService _carService;
 
-        public CarController(
-            ILogger<CarController> logger,
+        public ProductController(
+            ILogger<ProductController> logger,
             ICarService carService)
         {
             _carService = carService;
@@ -25,10 +26,10 @@ namespace CarShop.Controllers
 
         [HttpGet]
         [Route("GetAllCars")]
-        public ActionResult<List<Car>> GetAllCars()
+        public async Task<IActionResult> GetAllCars()
         {
-            var cars = _carService
-                .GetAllCars();
+            var cars = await _carService
+                .GetAllCarsAsync();
 
             if (cars is null)
             {
@@ -39,11 +40,11 @@ namespace CarShop.Controllers
         }
 
         [HttpGet]
-        [Route("GetCarById")]
-        public ActionResult<Car> GetCarById(int id)
+        [Route("GetCar")]
+        public async Task<IActionResult> GetCarById(int id)
         {
-            var car = _carService
-                .GetCarById(id);
+            var car = await _carService
+                .GetCarByIdAsync(id);
 
             if (car is null)
             {
@@ -54,10 +55,10 @@ namespace CarShop.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Car> AddCar([FromBody] Car newCar)
+        public async Task<IActionResult> AddCar([FromBody] Car newCar)
         {
-            var addedCar = _carService
-                .AddCar(newCar);
+            var addedCar = await _carService
+                .AddCarAsync(newCar);
 
             if (addedCar is null)
             {
@@ -68,10 +69,10 @@ namespace CarShop.Controllers
         }
 
         [HttpPut]
-        public ActionResult<Car> UpdateCar([FromBody] Car newCar)
+        public async Task<IActionResult> UpdateCar([FromBody] Car newCar)
         {
-            var updatedCar = _carService
-                .UpdateCar(newCar);
+            var updatedCar = await _carService
+                .UpdateCarAsync(newCar);
 
             if (updatedCar is null)
             {
@@ -82,10 +83,10 @@ namespace CarShop.Controllers
         }
 
         [HttpDelete]
-        public ActionResult<Car> DeleteCar(int carId)
+        public async Task<IActionResult> DeleteCar(int carId)
         {
-            var isDeleted = _carService
-                .DeleteCar(carId);
+            var isDeleted = await _carService
+                .DeleteCarAsync(carId);
 
             if (!isDeleted)
             {

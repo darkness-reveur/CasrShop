@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace CarShop.Infrastructure.Services.Implementations
 {
@@ -24,7 +25,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             _shopContext = shopContext;
         }
 
-        public CarBrand AddNewCarBrand(CarBrand newBrand)
+        public async Task<CarBrand> AddNewCarBrandAsync(CarBrand newBrand)
         {
             if (newBrand.Id != 0)
             {
@@ -33,14 +34,14 @@ namespace CarShop.Infrastructure.Services.Implementations
 
             try
             {
-                var existinBrand = _shopContext.Models
-                    .FirstOrDefault(model => model.Name == newBrand.Name);
+                var existinBrand = await _shopContext.Models
+                    .FirstOrDefaultAsync(model => model.Name == newBrand.Name);
 
                 if (existinBrand is null)
                 {
-                    _shopContext.Brands.Add(newBrand);
+                    await _shopContext.Brands.AddAsync(newBrand);
 
-                    _shopContext.SaveChanges();
+                    await _shopContext.SaveChangesAsync();
 
                     return newBrand;
                 }
@@ -50,7 +51,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                    nameof(BrandService),
-                   nameof(AddNewCarBrand),
+                   nameof(AddNewCarBrandAsync),
                    $"Failed to add new model: \"{newBrand.Name}\"",
                    ex);
 
@@ -58,18 +59,18 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public bool DeleteCarBrand(int brandId)
+        public async Task<bool> DeleteCarBrandAsync(int brandId)
         {
             try
             {
-                var exBrand = _shopContext.Brands
+                var exBrand = await _shopContext.Brands
                     .AsNoTracking()
-                    .FirstOrDefault(brand => brand.Id == brandId);
+                    .FirstOrDefaultAsync(brand => brand.Id == brandId);
 
                 _shopContext.Brands
                     .Remove(exBrand);
 
-                _shopContext.SaveChanges();
+                await _shopContext.SaveChangesAsync();
 
                 return true;
             }
@@ -77,7 +78,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(BrandService),
-                    nameof(DeleteCarBrand),
+                    nameof(DeleteCarBrandAsync),
                     $"Failed to delete brand with Id: {brandId} ",
                     ex);
 
@@ -85,12 +86,12 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public IEnumerable<CarBrand> GetAllCarBrands()
+        public async Task<IEnumerable<CarBrand>> GetAllCarBrandsAsync()
         {
             try
             {
-                var carBrands = _shopContext.Brands
-                    .ToList();
+                var carBrands = await _shopContext.Brands
+                    .ToListAsync();
 
                 return carBrands;
             }
@@ -98,7 +99,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(BrandService),
-                    nameof(GetAllCarBrands),
+                    nameof(GetAllCarBrandsAsync),
                     $"Cannot get datas about CarBrands from database !",
                     ex);
 
@@ -106,19 +107,19 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public CarBrand UpdateCarBrand(CarBrand brand)
+        public async Task<CarBrand> UpdateCarBrandAsync(CarBrand brand)
         {
             try
             {
-                var exBrand = _shopContext.Brands
-                    .FirstOrDefault(brand => brand.Id == brand.Id);
+                var exBrand = await _shopContext.Brands
+                    .FirstOrDefaultAsync(brand => brand.Id == brand.Id);
 
                 if (!(exBrand is null))
                 {
                     exBrand.Name = brand.Name;
                 }
 
-                _shopContext.SaveChanges();
+                await _shopContext.SaveChangesAsync();
 
                 return exBrand;
             }
@@ -126,7 +127,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(BrandService),
-                    nameof(UpdateCarBrand),
+                    nameof(UpdateCarBrandAsync),
                     $"Failed to update brand with Id: {brand.Id}",
                     ex);
 

@@ -1,16 +1,17 @@
 ﻿using CarShop.Common.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace CarShop.Infrastructure.Services.Interfacies
 {
     public interface IBrandService
     {
-        public CarBrand AddNewCarBrand(CarBrand brand);
+        public Task<CarBrand> AddNewCarBrandAsync(CarBrand brand);
 
-        public IEnumerable<CarBrand> GetAllCarBrands();
+        public Task<IEnumerable<CarBrand>> GetAllCarBrandsAsync();
 
-        public bool DeleteCarBrand(int brandId);
+        public Task<bool> DeleteCarBrandAsync(int brandId);
 
-        public CarBrand UpdateCarBrand(CarBrand brand);
+        public Task<CarBrand> UpdateCarBrandAsync(CarBrand brand);
     }
 }

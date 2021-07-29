@@ -9,14 +9,14 @@ namespace CarShop.Infrastructure.Services.Interfacies
 {
     public interface ICarService
     {
-        IEnumerable<Car> GetAllCars();
+        Task<IEnumerable<Car>> GetAllCarsAsync();
 
-        Car GetCarById(int id);
+        Task<Car> GetCarByIdAsync(int id);
 
-        Car AddCar(Car newCar);
+        Task<Car> AddCarAsync(Car newCar);
 
-        Car UpdateCar(Car newCar);
+        Task<Car> UpdateCarAsync(Car newCar);
 
-        bool DeleteCar(int carId);
+        Task<bool> DeleteCarAsync(int carId);
     }
 }

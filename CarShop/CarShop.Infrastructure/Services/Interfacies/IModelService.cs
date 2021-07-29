@@ -9,13 +9,13 @@ namespace CarShop.Infrastructure.Services.Interfacies
 {
     public interface IModelService
     {
-        public CarModel AddNewCarModel(CarModel model);
+        public Task<CarModel> AddNewCarModelAsync(CarModel model);
 
-        public IEnumerable<CarModel> GetAllCarModels();
+        public Task<IEnumerable<CarModel>> GetAllCarModelsAsync();
         
-        public bool DeleteCarModel(int modelId);
+        public Task<bool> DeleteCarModelAsync(int modelId);
 
-        public CarModel UpdateCarModel(CarModel model);
+        public Task<CarModel> UpdateCarModelAsync(CarModel model);
 
     }
 }

@@ -31,6 +31,45 @@ namespace CarShop.Infrastructure.DataBase
 
         public DbSet<AccessDataEntity> AccessData { get; set; }
 
-        public DbSet<RegisterData> RegisterDatas { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<User>()
+                .HasData(
+                new User
+                {
+                    Id = 1,
+                    Age = 20,
+                    Email = "uvapuvp@mail.com",
+                    Role = User.UserRoles.Admin,
+                    MobilePhoneNumber = "375293336651",
+                    Name = "Vladislau",
+                });
+
+            modelBuilder.Entity<AccessDataEntity>()
+                .HasData(
+                new AccessDataEntity
+                {
+                    Id = 1,
+                    Login = "21232F297A57A5A743894A0E4A801F",
+                    Password = "21232F297A57A5A743894A0E4A801F",
+                    UserId = 1
+                });
+
+            modelBuilder.Entity<CarBrand>()
+                .HasData(
+                new CarBrand
+                {
+                    Id = 1,
+                    Name = "Citroen",
+                });
+
+            modelBuilder.Entity<CarBrand>()
+                .HasData(
+                new CarBrand
+                {
+                    Id = 1,
+                    Name = "Citroen",
+                });
+        }
     }
 }

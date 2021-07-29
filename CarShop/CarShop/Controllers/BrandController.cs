@@ -27,10 +27,10 @@ namespace CarShop.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<CarBrand>> GetAllBrands()
+        public async Task<IActionResult> GetAllBrands()
         {
-            var brands = _brandService
-                .GetAllCarBrands();
+            var brands = await _brandService
+                .GetAllCarBrandsAsync();
 
             if (brands is null)
             {
@@ -41,10 +41,10 @@ namespace CarShop.Controllers
         }
 
         [HttpPost]
-        public ActionResult<CarBrand> AddNewBrand([FromBody] CarBrand newBrand)
+        public async Task<IActionResult> AddNewBrand([FromBody] CarBrand newBrand)
         {
-            var brand = _brandService
-                .AddNewCarBrand(newBrand);
+            var brand = await _brandService
+                .AddNewCarBrandAsync(newBrand);
 
             if (brand is null)
             {
@@ -55,10 +55,10 @@ namespace CarShop.Controllers
         }
 
         [HttpPut]
-        public ActionResult<CarBrand> UpdateBrand([FromBody] CarBrand newBrand) 
+        public async Task<IActionResult> UpdateBrand([FromBody] CarBrand newBrand) 
         {
-            var brand = _brandService
-                .UpdateCarBrand(newBrand);
+            var brand = await _brandService
+                .UpdateCarBrandAsync(newBrand);
 
             if (newBrand is null)
             {
@@ -69,10 +69,10 @@ namespace CarShop.Controllers
         }
 
         [HttpDelete]
-        public ActionResult<CarBrand> DeleteBrand(int brandId)
+        public async Task<IActionResult> DeleteBrand(int brandId)
         {
-            var isDeleted = _brandService
-                .DeleteCarBrand(brandId);
+            var isDeleted = await _brandService
+                .DeleteCarBrandAsync(brandId);
 
             if (!isDeleted)
             {

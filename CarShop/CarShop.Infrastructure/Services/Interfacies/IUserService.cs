@@ -9,12 +9,12 @@ namespace CarShop.Infrastructure.Services.Interfacies
 {
     public interface IUserService
     {
-        List<User> GetAll();
+        Task<List<User>> GetAllAsync();
 
-        User Add(User user);
+        Task<User> AddAsync(User user);
 
-        User GetUserById(int userId);
+        Task<User> GetUserByIdAsync(int userId);
 
-        User Update(User user);
+        Task<User> UpdateAsync(User user);
     }
 }

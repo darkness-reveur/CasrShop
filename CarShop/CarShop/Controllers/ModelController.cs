@@ -27,9 +27,9 @@ namespace CarShop.Controllers
         }
 
         [HttpGet]
-        public ActionResult<List<CarModel>> GetAllModels()
+        public async Task<IActionResult> GetAllModels()
         {
-            var models = _modelService.GetAllCarModels();
+            var models = await _modelService.GetAllCarModelsAsync();
 
             if (models == null)
             {
@@ -40,10 +40,10 @@ namespace CarShop.Controllers
         }
         
         [HttpPut]
-        public ActionResult<CarModel> UpdateModel([FromBody] CarModel newModel)
+        public async Task<IActionResult> UpdateModel([FromBody] CarModel newModel)
         {
-            var model = _modelService.
-                UpdateCarModel(newModel);
+            var model = await _modelService.
+                UpdateCarModelAsync(newModel);
 
             if (model is null)
             {
@@ -54,10 +54,10 @@ namespace CarShop.Controllers
         }
 
         [HttpDelete]
-        public ActionResult<CarModel> DeleteCategory(int categoryId)
+        public async Task<IActionResult> DeleteCategory(int categoryId)
         {
-            var isDeleted = _modelService
-                .DeleteCarModel(categoryId);
+            var isDeleted = await _modelService
+                .DeleteCarModelAsync(categoryId);
 
             if (!isDeleted)
             {

@@ -25,69 +25,25 @@ namespace CarShop.Infrastructure.Services.Implementations
             _logger = logger;
             _shopContext = shopContext;
         }
-        public Cart AddCarToCard(int carId, int userId)
-        {
 
-            throw new NotImplementedException();
-        } // not started
-
-        public Order AddNewOrder(Order newOrder)
-        {
-            if (newOrder.Id != 0)
-            {
-                return null;
-            }
-
-            try
-            {
-                var simultaneousOrder = _shopContext.Orders
-                    .FirstOrDefault(order => order.Date == newOrder.Date
-                    && order.UserId == newOrder.UserId);
-
-                var doubleOrder = _shopContext.Orders
-                    .FirstOrDefault(order => order.UserId == newOrder.UserId
-                    && order.OrderStatus == newOrder.OrderStatus
-                    && order.OrderStatus == Order.OrderStatuses.Opend);
-
-                if ((simultaneousOrder is null) && (doubleOrder is null))
-                {
-                    _shopContext.Orders
-                        .Add(newOrder);
-
-                    _shopContext.SaveChanges();
-                }
-                return newOrder;
-            }
-            catch (Exception ex)
-            {
-                _logger.LogErrorByTemplate(
-                    nameof(OrderService),
-                    nameof(AddNewOrder),
-                    $"Failed to add new Order of user: UserId={newOrder.UserId}, Date:{newOrder.Date}",
-                    ex);
-
-                return null;
-            }
-        }
-
-        public bool DeleteOrderDyId(int orderId)
+        public async Task<bool> DeleteOrderDyIdAsync(int orderId)
         {
             try
             {
-                var exOrder = _shopContext.Orders
+                var exOrder = await _shopContext.Orders
                     .AsNoTracking()
-                    .FirstOrDefault(order => order.Id == orderId);
+                    .FirstOrDefaultAsync(order => order.Id == orderId);
 
                 _shopContext.Orders.Remove(exOrder);
 
-                _shopContext.SaveChanges();
+                await _shopContext.SaveChangesAsync();
                 return true;
             }
             catch (Exception ex)
             {
                 _logger.LogErrorByTemplate(
                     nameof(OrderService),
-                    nameof(DeleteOrderDyId),
+                    nameof(DeleteOrderDyIdAsync),
                     $"Failed to delete Order with Id: {orderId} ",
                     ex);
 
@@ -95,15 +51,16 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public IEnumerable<Order> GetAllOrders()
+        public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
             try
             {
-                var orders = _shopContext.Orders
+                var orders =await _shopContext.Orders
                     .Include(order => order.User)
                     .Include(order => order.Cars)
                     .ThenInclude(cars => cars.CarModel)
-                    .ThenInclude(model => model.CarBrand);
+                    .ThenInclude(model => model.CarBrand)
+                    .ToListAsync();
 
                 return orders;
             }
@@ -111,7 +68,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(OrderService),
-                    nameof(GetAllOrders),
+                    nameof(GetAllOrdersAsync),
                     $"Cannot get datas about Orders from database ",
                     ex);
 
@@ -119,16 +76,16 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public Order GetOrderById(int orderId)
+        public async Task<Order> GetOrderByIdAsync(int orderId)
         {
             try
             {
-                var order = _shopContext.Orders
+                var order = await _shopContext.Orders
                     .Include(order => order.User)
                     .Include(order => order.Cars)
                     .ThenInclude(cars => cars.CarModel)
                     .ThenInclude(model => model.CarBrand)
-                    .FirstOrDefault(order => order.Id == orderId);
+                    .FirstOrDefaultAsync(order => order.Id == orderId);
 
                 return order;
             }
@@ -136,7 +93,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(OrderService),
-                    nameof(GetOrderById),
+                    nameof(GetOrderByIdAsync),
                     $"Cannot get Order with Id: {orderId} !",
                     ex);
 
@@ -144,30 +101,24 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public bool DeleteCarOutCard(int carId, int userId)
+        public async Task<Order> ApproveOrderAsync(int orderId)
         {
-            return false;
-        }
-
-        public Order UpdateOrder(Order newOrder)
-        {
+            if (orderId == 0)
+            {
+                return null;
+            }
             try
             {
-                var exOrder = _shopContext.Orders
-                    .FirstOrDefault(order => order.Id == newOrder.Id);
+                var exOrder = await _shopContext.Orders
+                    .FirstOrDefaultAsync(order => order.Id == orderId);
 
-                if (!(exOrder is null))
+                if (exOrder.Cars is null)
                 {
-                    exOrder.OrderStatus = newOrder.OrderStatus;
-                    exOrder.TotalAmount = newOrder.TotalAmount;
-                    exOrder.Date = newOrder.Date;
-
-                    _shopContext.SaveChanges();
-
-                    return exOrder;
+                    return null;
                 }
-
-                _shopContext.SaveChanges();
+                exOrder.OrderStatus = Order.OrderStatuses.Paid;
+                                
+                await _shopContext.SaveChangesAsync();
 
                 return exOrder;
             }
@@ -175,10 +126,56 @@ namespace CarShop.Infrastructure.Services.Implementations
             {
                 _logger.LogErrorByTemplate(
                     nameof(BrandService),
-                    nameof(UpdateOrder),
-                    $"Failed to update Order with Id: {newOrder.Id}",
+                    nameof(ApproveOrderAsync),
+                    $"Failed to update Order with Id: {orderId}",
                     ex);
 
+                return null;
+            }
+        }
+
+        public async Task<Order> CreateOrderAsync(int cartId)
+        {
+            if (cartId == 0)
+            {
+                return null;
+            }
+            try
+            {
+                Cart cart = await _shopContext.Carts
+                    .FirstOrDefaultAsync(cart => cart.Id == cartId);
+
+                double totalPrice = 0;
+
+                for (int i = 0; i < cart.Cars.Count; i++)
+                {
+                    totalPrice += cart.Cars[i].Price;
+                }
+
+                var order = new Order
+                {
+                    Date = DateTime.Now,
+                    OrderStatus = Order.OrderStatuses.InProgress,
+                    TotalAmount = totalPrice,
+                    Cars = cart.Cars
+                };
+
+                await _shopContext.Orders.AddAsync(order);
+
+                await _shopContext.SaveChangesAsync();
+
+                return order;
+            }
+            catch (Exception ex)
+            {
+                User user =await _shopContext.Users
+                    .FirstOrDefaultAsync(user => user.CartId == cartId);
+
+                _logger.LogErrorByTemplate(
+                  nameof(OrderService),
+                  nameof(CreateOrderAsync),
+                  $"Failed to add new order for user: {user.Name} with email: {user.Email}",
+                  ex);
                 return null;
             }
         }
