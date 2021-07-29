@@ -315,7 +315,6 @@ obj/
 *.csr
 *.css
 *.htm
-*.html
 *.js
 *.jsp
 *.php

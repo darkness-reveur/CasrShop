@@ -1,0 +1,55 @@
+<div class="col-md-7 col-lg-8 register-div">
+    <div class="row g-3">
+  
+      <h2 class='form-data'>
+        <b>User info</b>
+      </h2>
+  
+      <mat-form-field class="example-full-width">
+        <mat-label>UserName</mat-label>
+        <input matInput placeholder="UserName" [(ngModel)]='data.user.name'>
+      </mat-form-field>
+
+      <mat-form-field class="example-full-width">
+        <mat-label>Age</mat-label>
+        <input matInput placeholder="18" [(ngModel)]='data.user.age'>
+      </mat-form-field>
+  
+      <mat-form-field class="example-full-width">
+        <mat-label>Email</mat-label>
+        <input matInput placeholder="you@example.com" [(ngModel)]='data.user.email'>
+      </mat-form-field>
+  
+      <mat-form-field class="example-full-width">
+        <mat-label>Phone Number</mat-label>
+        <input matInput placeholder="+375(29)333-44-44" [(ngModel)]='data.user.phoneNumber'>
+      </mat-form-field>
+    
+      <h2 class="mb-3 form-data">Access data</h2>
+  
+      <mat-form-field class="example-full-width">
+        <mat-label>Login</mat-label>
+        <input matInput required [(ngModel)]='data.login' (keyup)='keyUp()'>
+      </mat-form-field>
+  
+      <mat-form-field class="example-full-width">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" required [(ngModel)]='data.password'>
+      </mat-form-field>
+  
+      <div class="buttons">
+        <div class="cancel-button">
+          <button mat-stroked-button (click)='cancelRegistration()'>Back</button>
+        </div>
+        <div class="submit-button">
+          <button mat-raised-button [disabled]='!isLoginFree'
+            (click)='register()' color="primary">Continue</button>
+        </div>
+      </div>
+  
+      <h4 class="mb-3 form-data">
+        <b>Already have an account? <a href='/login'>Log in!</a></b>
+      </h4>
+  
+    </div>
+  </div>

@@ -1,0 +1,21 @@
+<div class="text-center login-div">
+    <main class="form-signin">
+      <h1 class="h3 mb-3 fw-normal">Please sign in</h1>
+  
+      <mat-form-field class="form-floating login-data">
+        <mat-label>Login</mat-label>
+        <input matInput required [(ngModel)]='data.login'>
+      </mat-form-field>
+  
+      <mat-form-field class="form-floating login-data">
+        <mat-label>Password</mat-label>
+        <input matInput type="password" required [(ngModel)]='data.password'>
+      </mat-form-field>
+  
+      <button mat-raised-button color='primary' class="w-100" (click)='logIn()'>Sign in</button>
+  
+      <h4 class="mb-3 form-data">
+        <b>You want to create new account? <a href='/register'>Register!</a></b>
+      </h4>
+    </main>
+  </div>
