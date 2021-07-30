@@ -48,7 +48,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                 _logger.LogErrorByTemplate(
                    nameof(CartService),
                    nameof(AddCartAsync),
-                   $"Failed to add new user: {newCart.User.Name} with email: {newCart.User.Email} \"{newCart.UserId}\"",
+                   $"Failed to add new user: {newCart.User.Name} with email: {newCart.User.Email} ",
                    ex);
                 return null;
             }
@@ -64,7 +64,6 @@ namespace CarShop.Infrastructure.Services.Implementations
             try
             {
                 var order = await _shopContext.Carts
-                    .Include(cart => cart.User)
                     .Include(cart => cart.Cars)
                         .ThenInclude(cars => cars.CarModel)
                             .ThenInclude(model => model.CarBrand)

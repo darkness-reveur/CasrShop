@@ -18,7 +18,7 @@ export class RegisterComponent implements OnInit {
       id: 0,
       name: "",
       email: "",
-      phoneNumber: "",
+      mobilePhoneNumber: "",
       age: null,
       userRole: UserRoles.NotAuthorizedUser,
       orders: [],
@@ -78,7 +78,7 @@ export class RegisterComponent implements OnInit {
   register() {
     this.authService.Register(this.data).subscribe(result => {
       if(result) {
-        this.router.navigateByUrl('')
+        this.router.navigateByUrl('login')
       }
       else {
         this._snackBar.open('Error with registration')

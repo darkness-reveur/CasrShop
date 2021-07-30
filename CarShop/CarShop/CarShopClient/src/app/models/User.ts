@@ -13,7 +13,7 @@ export interface User{
 
     userRole: UserRoles
 
-    phoneNumber: string
+    mobilePhoneNumber: string
 
     car : Car
 

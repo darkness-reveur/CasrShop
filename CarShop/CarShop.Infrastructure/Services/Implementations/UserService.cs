@@ -53,6 +53,8 @@ namespace CarShop.Infrastructure.Services.Implementations
                     //await _cartService.AddCartAsync(newUser.Cart);
 
                     await _carShopContext.SaveChangesAsync();
+
+                    return newUser;
                 }
 
                 return exUser;

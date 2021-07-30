@@ -38,13 +38,13 @@ namespace CarShop.Common.Models
 
         public int CartId { get; set; }
 
-        [ForeignKey("CarId")]    
+        [ForeignKey("CartId")]    
         public virtual Cart Cart { get; set; }
         
         
         public enum UserRoles
         {
-            Admin,
+            Admin = 1,
             AdminAssistant,
             AuthorizedUser,
             NotAuthorizedUser

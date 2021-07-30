@@ -23,8 +23,8 @@ namespace CarShop.Common.Models
 
         public string Description { get; set; }
 
-        //[Required]
-        //public string[] PictureLinks { get; set; }
+        [Required]
+        public string PictureLinks { get; set; }
 
         [Required]
         public WheelDrives WheelDrive { get; set; }
@@ -43,7 +43,7 @@ namespace CarShop.Common.Models
         [ForeignKey("CartId")]
         public virtual Cart Cart { get; set; }
 
-        public int UserId { get; set; } 
+        public int? UserId { get; set; } 
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
