@@ -20,8 +20,9 @@ export class RegisterComponent implements OnInit {
       email: "",
       mobilePhoneNumber: "",
       age: null,
-      userRole: UserRoles.NotAuthorizedUser,
+      role: UserRoles.AuthorizedUser,
       orders: [],
+      carId: null,
       car: null,
       cart: null
     },
@@ -36,9 +37,10 @@ export class RegisterComponent implements OnInit {
   constructor(private authService: AuthService,
     private router: Router,
     private _snackBar: MatSnackBar,
-    private userService: UserService) { }
+    private userService: UserService,) { }
 
   ngOnInit(): void {
+    console.dir('onInitRegister')
     this.userService.getUser().subscribe(result => {
       if(result) {
           this.router.navigateByUrl('');
@@ -47,11 +49,14 @@ export class RegisterComponent implements OnInit {
     error =>{
 
     })
+    console.dir('onInitREgEnd')
   }
 
   keyUp(): void {
+    console.dir('KeyUp');
     if(this.timerId) {
       clearTimeout(this.timerId)
+      console.dir('KeyAppIsEnd');
     }
 
     this.timerId = setTimeout(this.checkLoginDelegate, 800);
@@ -60,28 +65,33 @@ export class RegisterComponent implements OnInit {
   checkLoginDelegate = () => { this.checkLogin() }
 
   checkLogin() {
+    console.dir(this.isLoginFree);
+      console.dir('checkLogin');
     this.authService.ChekUserLogin(this.data.login).subscribe(result => {
       if(!result) {
 
         this.isLoginFree = false;
+        console.dir(this.isLoginFree);
 
-        this._snackBar.open('Login is already served', '', {
-          duration: 2000
-        })
       }
       else {
         this.isLoginFree = true;
+        console.dir(this.isLoginFree);
       }
+      console.dir('checkLoginEnd');
     })
   }
 
   register() {
+    console.dir('register');
     this.authService.Register(this.data).subscribe(result => {
       if(result) {
         this.router.navigateByUrl('login')
+        console.dir('Register is end');
       }
       else {
         this._snackBar.open('Error with registration')
+        console.dir('Register is faled');
       }
     })
   }

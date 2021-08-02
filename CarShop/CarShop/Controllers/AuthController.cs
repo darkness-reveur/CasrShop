@@ -68,7 +68,6 @@ namespace CarShop.Controllers
             var user = await _authService.LogIn(
                     data.Login,
                     data.Password);
-
             if (user == null)
             {
                 _logger.LogWarning("Login data was incorrect");

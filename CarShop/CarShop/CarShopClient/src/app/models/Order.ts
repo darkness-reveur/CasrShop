@@ -20,7 +20,6 @@ export interface Order{
 
 export enum OrderStatuses
 {
-    Opend,
     InProgress,
     Paid
 }

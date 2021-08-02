@@ -8,9 +8,7 @@ import { UserService } from './services/user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent{
-  title = 'CarShopClient';
-  /*implements OnInit, DoCheck {
+export class AppComponent implements OnInit, DoCheck {
   
   title = 'CarShopClient';
 
@@ -23,23 +21,29 @@ export class AppComponent{
   constructor(
     private userService: UserService,
     private route: Router,) 
+
     {
+      console.dir('ConsoleStartWork');
     this.userService.getUser().subscribe(result => {
       this.user = result
       this.isDataLoaded = true
     }, error => {
       if (location.pathname !== '/register'
-      && location.pathname !== '/login') {}
+      && location.pathname !== '/login') {
+        this.route.navigate(['/login'])
+        console.dir('Console main end work');
+      }
     })
     
   }
 
   ngOnInit(): void {
-    console.dir('onInit')
+    console.dir('onInitMain')
   }
 
   ngDoCheck(){
     if(!this.isAuthorized
+      && this.isDataLoaded
       && location.pathname !== '/register'
       && location.pathname !== '/login') {
       this.userService.getUser().subscribe(result => {
@@ -48,5 +52,5 @@ export class AppComponent{
         this.isAuthorized = true
       })
     }
-  }*/
+  }
 }

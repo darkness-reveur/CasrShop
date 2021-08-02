@@ -11,15 +11,18 @@ export interface User{
 
     email : string
 
-    userRole: UserRoles
+    role: UserRoles
 
     mobilePhoneNumber: string
 
     car : Car
 
+    carId?: number
+
     orders : Order[]
 
     cart : Cart
+
 }
 
 export enum UserRoles{

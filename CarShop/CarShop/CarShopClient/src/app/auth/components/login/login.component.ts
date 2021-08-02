@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
     private authService: AuthService) {  }
 
   ngOnInit(): void {
+    console.dir('onInitLogin')
     this.userService.getUser().subscribe(result => {
       if(result) {
         this.router.navigateByUrl('');
@@ -32,9 +33,11 @@ export class LoginComponent implements OnInit {
     },
     error => {
     })
+    console.dir('onInitLoginEnd')
   }
 
   logIn() {
+    console.dir('StartLogin');
     this.authService.LogIn(this.data).subscribe(result => {
       if(result) {
         this.router.navigateByUrl('');

@@ -1,4 +1,4 @@
-import { CarBrand } from "./CarBrand";
+import { CarModel } from "./CarModel";
 import { Cart } from "./Cart";
 import { User } from "./user";
 
@@ -15,17 +15,17 @@ export interface Car{
 
     description : string
 
-    pictureLinks : string[]
+    pictureLinks : string
 
-    carModuleId : number
+    carModelId : number
 
-    carModule : CarBrand
+    carModel : CarModel
 
     cartId : number
 
     cart : Cart
 
-    userId : number
+    userId?: number
 
     user : User
 

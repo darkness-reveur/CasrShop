@@ -11,5 +11,5 @@ export interface CarModel{
 
     carBrand : CarBrand
 
-    cars : Car
+    cars : Car[]
 }

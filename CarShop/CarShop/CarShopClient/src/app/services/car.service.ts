@@ -8,7 +8,7 @@ import { Car } from '../models/Car';
 })
 export class CarService {
 
-  private url = '/api/Product';
+  private url = '/api/Product/';
 
   constructor(private http: HttpClient) { }
 

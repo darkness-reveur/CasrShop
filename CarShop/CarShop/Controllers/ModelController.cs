@@ -66,5 +66,16 @@ namespace CarShop.Controllers
 
             return Ok(isDeleted);
         }
+
+        [HttpPost]
+        public async Task<IActionResult> AddNewModel(CarModel carModel)
+        {
+            if (carModel is null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _modelService.AddNewCarModelAsync(carModel));
+        }
     }
 }

@@ -49,8 +49,16 @@ namespace CarShop.Infrastructure.Services.Implementations
                     newUser.Cart = new Cart();
 
                     await _carShopContext.Users.AddAsync(newUser);
+                    
+                    Cart cart = new Cart()
+                    {
+                        Cars = null,
+                        User = newUser
+                    };
 
-                    //await _cartService.AddCartAsync(newUser.Cart);
+                    await _cartService.AddCartAsync(cart);
+
+                    newUser.Cart = cart;
 
                     await _carShopContext.SaveChangesAsync();
 

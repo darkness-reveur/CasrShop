@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Car } from 'src/app/models/Car';
 import { CarBrand } from 'src/app/models/CarBrand';
 import { CarModel } from 'src/app/models/CarModel';
 
@@ -13,11 +14,14 @@ export class ProductDetailsComponent implements OnInit {
   
   brand: CarBrand;
 
+  cars: Car[]
+
   isValideData: boolean;
 
   constructor() { }
 
   ngOnInit(): void {
+
   }
 
 }

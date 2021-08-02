@@ -4,9 +4,7 @@ import { User } from "./user";
 export interface Cart{
     id : number
 
-    cars : Car
-
-    userId : number
+    cars : Car[]
 
     user : User
 }
