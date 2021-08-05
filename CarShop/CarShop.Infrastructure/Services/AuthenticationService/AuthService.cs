@@ -87,7 +87,7 @@ namespace CarShop.Infrastructure.Services.AuthenticationService
         {
             string hashedLogin = GetHashedValue(login);
 
-            string hashedPassword = GetHashedValue(password);
+            string hashedPassword = GetHashedValue(password); 
            
             try
             {

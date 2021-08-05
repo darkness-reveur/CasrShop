@@ -84,4 +84,4 @@ import { FormsModule } from '@angular/forms';
     ],
     declarations: []
 })
-export class MaterialModule { } 
+export class MaterialModule { }

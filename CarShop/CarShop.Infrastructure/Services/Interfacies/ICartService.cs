@@ -15,9 +15,9 @@ namespace CarShop.Infrastructure.Services.Interfacies
 
         Task<Cart> GetCartByIdAsync(int cartId);
 
-        Task<Cart> AddNewCarInCartAsync(int newCarId, int userId);
+        Task<bool> AddNewCarInCartAsync(int newCarId, int userId);
 
-        Task<bool> DeleteCarOutCartAsync(int carId, int cartId);
+        Task<Cart> DeleteCarOutCartAsync(int carId, int cartId);
 
         Task<bool> DeleteCartAsync(int basketId);
     }

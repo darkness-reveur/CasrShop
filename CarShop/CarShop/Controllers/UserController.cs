@@ -76,13 +76,15 @@ namespace CarShop.Controllers
             var userIdString = User.FindFirst("userid")?.Value;
 
             if (!(user is null)
-                && user.Id.ToString().Equals(userIdString)
-                || User.IsInRole(UserRoles.Admin.ToString()))
+                && user.Id.ToString().Equals(userIdString))
             {
                 await _userService.UpdateAsync(user);
             }
         }
 
+        [HttpGet]
+        [Route("GetCart")]
+        [Authorize]
         public async Task<IActionResult> GetCartForUser()
         {
             var userIdString = User.FindFirst("userid")?.Value;
@@ -105,7 +107,10 @@ namespace CarShop.Controllers
             return Ok(cart);
         }
 
-        public async Task<IActionResult> AddCarForCart(int carId)
+        [HttpPut]
+        [Route("AddCarToCart")]
+        [Authorize]
+        public async Task<IActionResult> AddCarToCart([FromBody] int carId)
         {
             var userIdString = User.FindFirst("userid")?.Value;
 
@@ -115,6 +120,21 @@ namespace CarShop.Controllers
             }
 
             return Ok(await _cartService.AddNewCarInCartAsync(carId, userId));
+        }
+
+        [HttpPut]
+        [Route("DeleteCarFromCart")]
+        [Authorize]
+        public async Task<IActionResult> DeleteCarFromCart([FromBody] int carId)
+        {
+            var userIdString = User.FindFirst("userid")?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest();
+            }
+
+            return Ok(await _cartService.DeleteCarOutCartAsync(carId, userId));
         }
 
 

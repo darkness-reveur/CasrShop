@@ -17,7 +17,11 @@ import { MaterialModule } from './material.module';
 import { NavBarComponent } from './components/nav-bar/nav-bar/nav-bar.component';
 import { ProfileComponent } from './components/profile/profile/profile.component';
 import { HomeComponent } from './components/home/home.component';
-import { ProductDetailsComponent } from './components/product-details/product-details.component';
+import { CartComponent } from './components/profile/cart/cart.component';
+import { OrderComponent } from './components/profile/order/order.component';
+import { ProductDialogComponent } from './components/dialog/product-dialog/product-dialog.component';
+import { UserDialogComponent } from './components/dialog/user-dialog/user-dialog.component';
+import { ProfileMainComponent } from './components/profile/profile-main.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +31,11 @@ import { ProductDetailsComponent } from './components/product-details/product-de
     NavBarComponent,
     ProfileComponent,
     HomeComponent,
-    ProductDetailsComponent,
+    CartComponent,
+    OrderComponent,
+    ProductDialogComponent,
+    UserDialogComponent,
+    ProfileMainComponent,
 
   ],
   imports: [

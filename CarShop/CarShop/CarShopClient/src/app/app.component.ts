@@ -8,49 +8,38 @@ import { UserService } from './services/user.service';
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, DoCheck {
-  
+export class AppComponent implements OnInit {
+
   title = 'CarShopClient';
-
-  isDataLoaded: boolean = false
-
-  isAuthorized: boolean = false
 
   user: User
 
+  isAuthorized: boolean = false
+
+  isDataLoaded: boolean = false
+
   constructor(
     private userService: UserService,
-    private route: Router,) 
-
-    {
-      console.dir('ConsoleStartWork');
+    private router: Router) {
     this.userService.getUser().subscribe(result => {
       this.user = result
-      this.isDataLoaded = true
-    }, error => {
-      if (location.pathname !== '/register'
-      && location.pathname !== '/login') {
-        this.route.navigate(['/login'])
-        console.dir('Console main end work');
-      }
-    })
-    
+      this.isDataLoaded = true;
+    }, error => { })
   }
 
   ngOnInit(): void {
-    console.dir('onInitMain')
+    console.dir('onInit')
   }
 
-  ngDoCheck(){
+  /* ngDoCheck() {
     if(!this.isAuthorized
-      && this.isDataLoaded
       && location.pathname !== '/register'
       && location.pathname !== '/login') {
-      this.userService.getUser().subscribe(result => {
-        this.user = result
-        this.isDataLoaded = true
-        this.isAuthorized = true
-      })
+        this.userService.getUser().subscribe(result => {
+          this.user = result;
+          this.isAuthorized = true;
+        })
     }
-  }
+  } */
 }
+

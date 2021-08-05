@@ -158,5 +158,27 @@ namespace CarShop.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        [Route("LogOut")]
+        public async Task<IActionResult> LogoutAsync()
+        {
+            try
+            {
+                await HttpContext.SignOutAsync(
+                    CookieAuthenticationDefaults.AuthenticationScheme);
+
+                return Ok(true);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogErrorByTemplate(
+                    nameof(AuthController),
+                    nameof(LogoutAsync),
+                    $"LogOut error",
+                    ex);
+                return BadRequest();
+            }
+        }
     }
 }

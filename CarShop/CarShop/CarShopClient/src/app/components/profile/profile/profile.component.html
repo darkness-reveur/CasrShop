@@ -1,0 +1,38 @@
+<div *ngIf='user' class="col-md-7 col-lg-8 register-div">
+    <div class="row g-3">
+
+        <h2 class='form-data'>
+            <b>Персональная информация</b>
+        </h2>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Имя пользователя</mat-label>
+            <input [disabled]='!isInEditing' matInput [(ngModel)]='user.name'>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Возраст</mat-label>
+            <input [disabled]='!isInEditing' matInput [(ngModel)]='user.age'>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Email</mat-label>
+            <input [disabled]='!isInEditing' matInput [(ngModel)]='user.email'>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+            <mat-label>Телефонный номер</mat-label>
+            <input [disabled]='!isInEditing' matInput [(ngModel)]='user.mobilePhoneNumber'>
+        </mat-form-field>
+
+        <div class="buttons">
+            <div class="cancel-button">
+                <button mat-stroked-button [disabled]='isInEditing' (click)='startEditing()'>Редактировать</button>
+            </div>
+            <div class="submit-button">
+                <button mat-raised-button [disabled]='!isInEditing' (click)='saveChanges()'
+                    color="primary">Сохранить</button>
+            </div>
+        </div>
+    </div>
+</div>

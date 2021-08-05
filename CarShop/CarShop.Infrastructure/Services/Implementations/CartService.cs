@@ -48,7 +48,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                 _logger.LogErrorByTemplate(
                    nameof(CartService),
                    nameof(AddCartAsync),
-                   $"Failed to add new user: {newCart.User.Name} with email: {newCart.User.Email} ",
+                   $"Failed to add new user",
                    ex);
                 return null;
             }
@@ -63,13 +63,14 @@ namespace CarShop.Infrastructure.Services.Implementations
 
             try
             {
-                var order = await _shopContext.Carts
-                    .Include(cart => cart.Cars)
-                        .ThenInclude(cars => cars.CarModel)
-                            .ThenInclude(model => model.CarBrand)
+                var cart = await _shopContext.Carts
+                    .Include(cart => cart.CartsCars)
+                        .ThenInclude(cartsCars => cartsCars.Car)
+                            .ThenInclude(cars => cars.CarModel)
+                                .ThenInclude(model => model.CarBrand)
                     .FirstOrDefaultAsync(cart => cart.Id == cartId);
 
-                return order;
+                return cart;
             }
             catch (Exception ex)
             {
@@ -83,43 +84,62 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public async Task<Cart> AddNewCarInCartAsync(int newCarId, int userId)
+        public async Task<bool> AddNewCarInCartAsync(int newCarId, int userId)
         {
             if (newCarId == 0 || userId == 0)
             {
-                return null;
+                return false;
             }
             try
             {
                 var helperUserWithTheCart = await _shopContext.Users
                     .Include(user => user.Cart)
-                        .ThenInclude(cart => cart.Cars)
+                        .ThenInclude(cart => cart.CartsCars)
+                            .ThenInclude(cartCar => cartCar.Car)
                     .FirstOrDefaultAsync(user => user.Id == userId);
 
                 var car = await _carService.GetCarByIdAsync(newCarId);
 
-                if (car is null)
+                if (car is null
+                    || helperUserWithTheCart is null)
                 {
-                    return null;
+                    return false;
                 }
 
                 if (helperUserWithTheCart.Cart is null)
                 {
-                    helperUserWithTheCart.Cart = new Cart()
-                    {
-                        Cars = new List<Car>()
-                    };
-                     helperUserWithTheCart.Cart.Cars.Add(car);
-
-                    await _shopContext.SaveChangesAsync();
+                    helperUserWithTheCart.Cart = new Cart();
                 }
-                else
+
+                CartCar cartCar = new CartCar
                 {
-                    helperUserWithTheCart.Cart.Cars.Add(car);
+                    Car = car,
+                    Cart = helperUserWithTheCart.Cart
+                };
 
-                    await _shopContext.SaveChangesAsync();
-                }
-                return helperUserWithTheCart.Cart;
+                helperUserWithTheCart.Cart.CartsCars.Add(cartCar);
+
+
+                await _shopContext.SaveChangesAsync();
+
+
+                //if (helperUserWithTheCart.Cart is null)
+                //{
+                //    helperUserWithTheCart.Cart = new Cart()
+                //    {
+                //        Cars = new List<Car>()
+                //    };
+                //    helperUserWithTheCart.Cart.Cars.Add(car);
+
+                //    await _shopContext.SaveChangesAsync();
+                //}
+                //else
+                //{
+                //    helperUserWithTheCart.Cart.Cars.Add(car);
+
+                //    await _shopContext.SaveChangesAsync();
+                //}
+                return true;
             }
             catch (Exception ex)
             {
@@ -128,7 +148,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                        nameof(AddNewCarInCartAsync),
                        $"Failed to create cart for user (userId={userId})",
                        ex);
-                return null;
+                return false;
             }
         }
 
@@ -136,7 +156,7 @@ namespace CarShop.Infrastructure.Services.Implementations
         {
             try
             {
-                var exCart =await _shopContext.Carts
+                var exCart = await _shopContext.Carts
                     .AsNoTracking()
                     .FirstOrDefaultAsync(basket => basket.Id == basketId);
 
@@ -157,32 +177,40 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-        public async Task<bool> DeleteCarOutCartAsync(int newCarId, int userId)
+
+
+        public async Task<Cart> DeleteCarOutCartAsync(int newCarId, int userId)
         {
             if (newCarId == 0 || userId == 0)
             {
-                return false;
+                return null;
             }
             try
             {
                 var helperUserWithCart = await _shopContext.Users
                     .Include(user => user.Cart)
-                        .ThenInclude(cart => cart.Cars)
+                        .ThenInclude(cart => cart.CartsCars)
+                            .ThenInclude(cartCar => cartCar.Car)
                     .FirstOrDefaultAsync(user => user.Id == userId);
 
-                var carInCart = helperUserWithCart.Cart.Cars
-                    .FirstOrDefault(car => car.Id == newCarId);
+                Car carInCart = null;
+                foreach (CartCar cart in helperUserWithCart.Cart.CartsCars)
+                {
+                    carInCart = cart.Car;
+                }
 
                 if (carInCart is null)
                 {
-                    return false;
+                    return null;
                 }
                 // нужно сделать в юзер контроллере удаление машины из карзины если этот метод правильный
-                helperUserWithCart.Cart.Cars.Remove(carInCart);
+                CartCar cartCar = helperUserWithCart.Cart.CartsCars.FirstOrDefault(cartcar => cartcar.Car == carInCart);
+
+                helperUserWithCart.Cart.CartsCars.Remove(cartCar);
 
                 await _shopContext.SaveChangesAsync();
 
-                return true;
+                return helperUserWithCart.Cart;
             }
             catch (Exception ex)
             {
@@ -191,7 +219,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                        nameof(AddNewCarInCartAsync),
                        $"Failed to delete car out cart for user (userId={userId})",
                        ex);
-                return false;
+                return null;
             }
         }
 

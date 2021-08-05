@@ -1,45 +1,39 @@
 import { CarModel } from "./CarModel";
-import { Cart } from "./Cart";
+import { CartCar } from "./CartCar";
 import { User } from "./user";
 
-export interface Car{
-    id : number
+export interface Car {
+    id: number
 
-    releaseYear : number
+    releaseYear: number
 
-    engineVolume : number
+    engineVolume: number
 
-    price : number
+    price: number
 
-    vehicleMileage : number
+    vehicleMileage: number
 
-    description : string
+    description: string
 
-    pictureLinks : string
+    pictureLinks: string
 
-    carModelId : number
+    carModelId: number
 
-    carModel : CarModel
+    carModel: CarModel
 
-    cartId : number
+    cartsCar: CartCar[]
 
-    cart : Cart
+    wheelDrive: WheelDrives
 
-    userId?: number
-
-    user : User
-
-    wheelDrive : WheelDrives
-
-    engineType : EngineTypes
+    engineType: EngineTypes
 }
 
-export enum EngineTypes{
+export enum EngineTypes {
     PetrolEngine,
     DieselEngine,
     ElectroEngine
 }
-export enum WheelDrives{
+export enum WheelDrives {
     FrontWheelDrive,
     RealWheelDrive,
     AllWheelDrive,

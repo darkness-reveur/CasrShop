@@ -13,6 +13,8 @@ namespace CarShop.Infrastructure.Services.Interfacies
 
         public Task<Order> GetOrderByIdAsync(int orderId);
 
+        public Task<IEnumerable<Order>> GerAllUserOrdersAsync(int userId);
+
         public Task<Order> CreateOrderAsync(int cartId);
 
         public Task<Order> ApproveOrderAsync(int orderId);

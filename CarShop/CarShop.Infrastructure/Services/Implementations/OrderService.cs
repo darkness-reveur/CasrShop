@@ -76,6 +76,37 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
+        public async Task<IEnumerable<Order>> GerAllUserOrdersAsync(int userId)
+        {
+            if (userId == 0)
+            {
+                return null;
+            }
+
+            try
+            {
+                var userOrders = _shopContext.Orders
+                    .Include(order => order.User)
+                    .Include(order => order.Cars)
+                        .ThenInclude(cars => cars.CarModel)
+                            .ThenInclude(models => models.CarBrand)
+                    .Where(order => order.UserId == userId)
+                    .ToListAsync();
+
+                return await userOrders;
+            }
+            catch(Exception ex)
+            {
+                _logger.LogErrorByTemplate(
+                    nameof(OrderService),
+                    nameof(GerAllUserOrdersAsync),
+                    $"Cannot get datas about Orders from database ",
+                    ex);
+
+                return null;
+            }
+        }
+
         public async Task<Order> GetOrderByIdAsync(int orderId)
         {
             try
@@ -143,13 +174,19 @@ namespace CarShop.Infrastructure.Services.Implementations
             try
             {
                 Cart cart = await _shopContext.Carts
+                    .Include(cart => cart.CartsCars)
+                        .ThenInclude(cartCar => cartCar.Car)
                     .FirstOrDefaultAsync(cart => cart.Id == cartId);
 
                 double totalPrice = 0;
 
-                for (int i = 0; i < cart.Cars.Count; i++)
+                List<Car> cars = new List<Car>();
+
+                foreach (var car in cart.CartsCars)
                 {
-                    totalPrice += cart.Cars[i].Price;
+                    cars.Add(car.Car);
+
+                    totalPrice += car.Car.Price;
                 }
 
                 var order = new Order
@@ -157,10 +194,12 @@ namespace CarShop.Infrastructure.Services.Implementations
                     Date = DateTime.Now,
                     OrderStatus = Order.OrderStatuses.InProgress,
                     TotalAmount = totalPrice,
-                    Cars = cart.Cars
+                    Cars = cars
                 };
 
                 await _shopContext.Orders.AddAsync(order);
+
+                _shopContext.Cars.RemoveRange(cars);
 
                 await _shopContext.SaveChangesAsync();
 

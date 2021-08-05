@@ -1,9 +1,9 @@
 import { User } from "src/app/models/User";
 
-export interface RegisterData{
-    user : User
+export interface RegisterData {
+    user: User
 
-    login : string
+    login: string
 
-    password : string
+    password: string
 }

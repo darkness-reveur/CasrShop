@@ -2,14 +2,14 @@ import { Car } from "./Car";
 import { CarBrand } from "./CarBrand";
 
 
-export interface CarModel{
-    id : number
+export interface CarModel {
+    id: number
 
-    name : string
+    name: string
 
-    carBrandId : number 
+    carBrandId: number
 
-    carBrand : CarBrand
+    carBrand: CarBrand
 
-    cars : Car[]
+    cars: Car[]
 }

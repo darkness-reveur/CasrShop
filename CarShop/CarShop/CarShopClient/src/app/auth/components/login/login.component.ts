@@ -22,30 +22,31 @@ export class LoginComponent implements OnInit {
   constructor(private snackBar: MatSnackBar,
     private userService: UserService,
     private router: Router,
-    private authService: AuthService) {  }
+    private authService: AuthService) { }
 
   ngOnInit(): void {
     console.dir('onInitLogin')
     this.userService.getUser().subscribe(result => {
-      if(result) {
+      if (result) {
         this.router.navigateByUrl('');
       }
     },
-    error => {
-    })
+      error => {
+      })
     console.dir('onInitLoginEnd')
   }
 
   logIn() {
     console.dir('StartLogin');
     this.authService.LogIn(this.data).subscribe(result => {
-      if(result) {
+      if (result) {
         this.router.navigateByUrl('');
       }
       else {
         this.snackBar.open('Login or password was incorrect')
       }
     })
+    console.dir('LoginEnd');
   }
 
 }

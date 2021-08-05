@@ -11,10 +11,7 @@ namespace CarShop.Common.Models
     {
         public int Id { get; set; }
         
-        public virtual List<Car> Cars { get; set; }
-
-
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; }
+        public List<CartCar> CartsCars { get; set; }
+        //public virtual List<Car> Cars { get; set; }
     }
 }

@@ -2,24 +2,23 @@ import { Car } from "./Car";
 import { User } from "./user";
 
 
-export interface Order{
-    id : number
+export interface Order {
+    id: number
 
-    totalAmount : number
+    totalAmount: number
 
-    date : Date
+    date: Date
 
-    orderStatus : OrderStatuses
+    orderStatus: OrderStatuses
 
-    userId : number
+    userId: number
 
-    user : User
+    user: User
 
-    cars : Car[]
+    cars: Car[]
 }
 
-export enum OrderStatuses
-{
+export enum OrderStatuses {
     InProgress,
     Paid
 }

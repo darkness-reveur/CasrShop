@@ -1,0 +1,15 @@
+<mat-tab-group *ngIf='isChecked' mat-align-tabs="center">
+    <mat-tab label="Персональная информация">
+        <app-profile (updateData)='updateData()' [user]='user'></app-profile>
+    </mat-tab>
+    <!-- <mat-tab *ngIf='user?.userRole!=1' label="Корзина">
+        <app-cart [cart]='cart'></app-cart>
+    </mat-tab>
+    <mat-tab *ngIf='user?.userRole!=1' label="Заказы">
+        <app-order [orsers]='orsers'></app-order>
+    </mat-tab> -->
+    <!-- <mat-tab label="Заказы">
+        <app-order *ngIf='user?.userRole!=1' [orders]='user?.orders'></app-order>
+        <app-order *ngIf='user?.userRole===1' [admin]='user' [users]='users'></app-order>
+    </mat-tab>  -->
+</mat-tab-group>

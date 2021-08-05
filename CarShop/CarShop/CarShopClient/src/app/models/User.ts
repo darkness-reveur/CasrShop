@@ -2,31 +2,30 @@ import { Car } from "./Car";
 import { Cart } from "./Cart";
 import { Order } from "./Order";
 
-export interface User{
-    id : number
+export interface User {
+    id: number
 
-    name : string 
+    name: string
 
-    age : number
+    age: number
 
-    email : string
+    email: string
 
     role: UserRoles
 
     mobilePhoneNumber: string
 
-    car : Car
+    car: Car
 
     carId?: number
 
-    orders : Order[]
+    orders: Order[]
 
-    cart : Cart
-
+    cart: Cart
 }
 
-export enum UserRoles{
-    Admin,
+export enum UserRoles {
+    Admin = 1,
     AdminAssistant,
     AuthorizedUser,
     NotAuthorizedUser

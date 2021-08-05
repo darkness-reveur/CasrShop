@@ -18,22 +18,35 @@ namespace CarShop.Controllers
     {
         private readonly IOrderService _orderService;
 
+        private readonly IUserService _userService;
+
         private readonly ILogger _logger;
 
         public OrderController(
             IOrderService orderService,
-            ILogger<OrderController> logger)
+            ILogger<OrderController> logger,
+            IUserService userService)
         {
             _logger = logger;
             _orderService = orderService;
+            _userService = userService;
         }
 
         [HttpGet]
-        [Route("GetAllOrders")]
-        public async Task<ActionResult> GetAllOrders()
+        [Route("GetAllUserOrders")]
+        [Authorize]
+        public async Task<ActionResult> GerAllUserOrders()
         {
-            var orders = await _orderService
-                .GetAllOrdersAsync();
+
+            var userIdString = User.FindFirst("userid")?.Value;
+
+            if (!int.TryParse(userIdString, out int userId))
+            {
+                return BadRequest();
+            }
+
+            var orders = await _orderService.GerAllUserOrdersAsync(userId);
+
 
             if (orders is null)
             {

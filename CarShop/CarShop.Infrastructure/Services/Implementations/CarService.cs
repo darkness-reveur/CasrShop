@@ -28,7 +28,6 @@ namespace CarShop.Infrastructure.Services.Implementations
             try
             {
                 var Cars = await _shopContext.Cars
-                    .Include(car => car.User)
                     .Include(car => car.CarModel)
                     .ThenInclude(model => model.CarBrand)
                     .ToListAsync();
@@ -56,8 +55,7 @@ namespace CarShop.Infrastructure.Services.Implementations
             try
             {
                 var existinCar = await _shopContext.Cars
-                    .FirstOrDefaultAsync(car => car.UserId == newCar.UserId
-                    && car.VehicleMileage == newCar.VehicleMileage
+                    .FirstOrDefaultAsync(car => car.VehicleMileage == newCar.VehicleMileage
                     && car.Description == newCar.Description
                     && car.CarModelId == newCar.CarModelId
                     && car.ReleaseYear == newCar.ReleaseYear
@@ -81,8 +79,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                 _logger.LogErrorByTemplate(
                     nameof(CarService),
                     nameof(AddCarAsync),
-                    $"Failed to add new car: {newCar.CarModel.CarBrand} {newCar.CarModel} {newCar.ReleaseYear}" +
-                    $"\n{newCar.User.Name} {newCar.User.Email} Trying to add car",
+                    $"Failed to add new car: {newCar.CarModel.CarBrand} {newCar.CarModel} {newCar.ReleaseYear}",
                     ex);
 
                 return null;
@@ -126,7 +123,6 @@ namespace CarShop.Infrastructure.Services.Implementations
                 var car = await _shopContext.Cars
                     .Include(car => car.CarModel)
                     .ThenInclude(model => model.CarBrand)
-                    .Include(car => car.User)
                     .FirstOrDefaultAsync(car => car.Id == id);
 
                 return car;

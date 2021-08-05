@@ -1,9 +1,9 @@
-export interface LoginData{
-    id : number
+export interface LoginData {
+    id: number
 
-    login : string
+    login: string
 
-    password : string 
+    password: string
 
     userId: number
 }

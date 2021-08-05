@@ -33,6 +33,21 @@ namespace CarShop.Infrastructure.DataBase
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //modelBuilder.Entity<CartCar>()
+            //    .HasKey(ba => new { ba.CartId, ba.CarId });
+
+            //modelBuilder.Entity<CartCar>()
+            //    .HasOne(ba => ba.Car)
+            //    .WithMany(ba => ba.CartsCars)
+            //    .HasForeignKey(ba => ba.CarId);
+
+            //modelBuilder.Entity<CartCar>()
+            //    .HasOne(ba => ba.Cart)
+            //    .WithMany(ba => ba.CartsCars)
+            //    .HasForeignKey(ba => ba.CartId);
+
+
+
             //modelBuilder.Entity<User>()
             //    .HasData(
             //    new User
@@ -78,7 +93,7 @@ namespace CarShop.Infrastructure.DataBase
             //        Name = "C4 picasso",
             //        CarBrandId = 1,
             //    }); 
-            
+
             //modelBuilder.Entity<Car>()
             //     .HasData(
             //     new Car

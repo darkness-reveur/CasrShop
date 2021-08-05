@@ -1,10 +1,10 @@
 import { CarModel } from "./CarModel";
 
 
-export interface CarBrand{
-    id : number
+export interface CarBrand {
+    id: number
 
-    name : string
+    name: string
 
-    carModels : CarModel[]
+    carModels: CarModel[]
 }

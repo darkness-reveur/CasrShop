@@ -12,7 +12,7 @@ import { AuthService } from '../../services/AuthServise';
   styleUrls: ['./register.component.scss']
 })
 export class RegisterComponent implements OnInit {
-  
+
   data: RegisterData = {
     user: {
       id: 0,
@@ -42,19 +42,19 @@ export class RegisterComponent implements OnInit {
   ngOnInit(): void {
     console.dir('onInitRegister')
     this.userService.getUser().subscribe(result => {
-      if(result) {
-          this.router.navigateByUrl('');
+      if (result) {
+        this.router.navigateByUrl('');
       }
     },
-    error =>{
+      error => {
 
-    })
+      })
     console.dir('onInitREgEnd')
   }
 
   keyUp(): void {
     console.dir('KeyUp');
-    if(this.timerId) {
+    if (this.timerId) {
       clearTimeout(this.timerId)
       console.dir('KeyAppIsEnd');
     }
@@ -66,9 +66,9 @@ export class RegisterComponent implements OnInit {
 
   checkLogin() {
     console.dir(this.isLoginFree);
-      console.dir('checkLogin');
+    console.dir('checkLogin');
     this.authService.ChekUserLogin(this.data.login).subscribe(result => {
-      if(!result) {
+      if (!result) {
 
         this.isLoginFree = false;
         console.dir(this.isLoginFree);
@@ -79,13 +79,14 @@ export class RegisterComponent implements OnInit {
         console.dir(this.isLoginFree);
       }
       console.dir('checkLoginEnd');
-    })
+    });
+
   }
 
   register() {
     console.dir('register');
     this.authService.Register(this.data).subscribe(result => {
-      if(result) {
+      if (result) {
         this.router.navigateByUrl('login')
         console.dir('Register is end');
       }

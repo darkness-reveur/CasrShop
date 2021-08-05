@@ -18,7 +18,7 @@ export class BrandService {
 
   AddNewBrand(carBrand: CarBrand): Observable<CarBrand> {
     return this.http.post<CarBrand>(`${this.url}`, carBrand);
-  } 
+  }
 
   DeleteBrand(carBrandId: number): Observable<void> {
     return this.http.delete<void>(`${this.url}?carBrandId=${carBrandId}`);

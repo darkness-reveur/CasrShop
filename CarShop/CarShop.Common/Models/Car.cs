@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace CarShop.Common.Models
@@ -38,15 +39,7 @@ namespace CarShop.Common.Models
         [ForeignKey("CarModelId")]
         public virtual CarModel CarModel { get; set; }
 
-        public int? CartId { get; set; }
-
-        [ForeignKey("CartId")]
-        public virtual Cart Cart { get; set; }
-
-        public int? UserId { get; set; } 
-
-        [ForeignKey("UserId")]
-        public virtual User User { get; set; }
+        public List<CartCar> CartsCars { get; set; }
 
         public enum EngineTypes
         {

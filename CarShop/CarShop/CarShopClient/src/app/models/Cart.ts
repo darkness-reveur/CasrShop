@@ -1,10 +1,9 @@
 import { Car } from "./Car";
+import { CartCar } from "./CartCar";
 import { User } from "./user";
 
-export interface Cart{
-    id : number
+export interface Cart {
+    id: number
 
-    cars : Car[]
-
-    user : User
+    cartCars: CartCar[]
 }

@@ -8,7 +8,7 @@ import { RegisterData } from '../models/registerData';
 @Injectable({
     providedIn: 'root'
 })
-export class AuthService{
+export class AuthService {
     constructor(public http: HttpClient) { }
 
     private url = '/api/auth/';
@@ -21,7 +21,11 @@ export class AuthService{
         return this.http.put<boolean>(`${this.url}`, data);
     }
 
-    ChekUserLogin(login: string): Observable<boolean>{
+    ChekUserLogin(login: string): Observable<boolean> {
         return this.http.get<boolean>(`${this.url}IsLoginFree/${login}`)
+    }
+
+    LogOut(): Observable<boolean> {
+        return this.http.get<boolean>(`${this.url}LogOut`);
     }
 }

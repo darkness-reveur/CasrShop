@@ -50,15 +50,7 @@ namespace CarShop.Infrastructure.Services.Implementations
 
                     await _carShopContext.Users.AddAsync(newUser);
                     
-                    Cart cart = new Cart()
-                    {
-                        Cars = null,
-                        User = newUser
-                    };
-
-                    await _cartService.AddCartAsync(cart);
-
-                    newUser.Cart = cart;
+                    await _cartService.AddCartAsync(newUser.Cart);
 
                     await _carShopContext.SaveChangesAsync();
 
@@ -87,7 +79,8 @@ namespace CarShop.Infrastructure.Services.Implementations
                     .Include(user => user.Orders)
                         .ThenInclude(order => order.Cars)
                     .Include(user => user.Cart)
-                        .ThenInclude(cart => cart.Cars)
+                        .ThenInclude(cart => cart.CartsCars)
+                            .ThenInclude(cartCar => cartCar.Car)
                     .Include(user => user.Car)
                     .ToListAsync();
 
@@ -113,9 +106,10 @@ namespace CarShop.Infrastructure.Services.Implementations
                     .Include(user => user.Orders)
                         .ThenInclude(order => order.Cars)
                     .Include(user => user.Cart)
-                        .ThenInclude(cart => cart.Cars)
+                        .ThenInclude(cart => cart.CartsCars)
+                            .ThenInclude(cartCar => cartCar.Car)
                     .Include(user => user.Car)
-                    .FirstOrDefaultAsync();
+                    .FirstOrDefaultAsync(user => user.Id == userId);
 
 
                 return user;
@@ -145,7 +139,6 @@ namespace CarShop.Infrastructure.Services.Implementations
                     exUser.Name = newUser.Name;
                     exUser.Email = newUser.Email;
                     exUser.Age = newUser.Age;
-                    exUser.Role = newUser.Role;
 
                     await _carShopContext.SaveChangesAsync();
                 }
