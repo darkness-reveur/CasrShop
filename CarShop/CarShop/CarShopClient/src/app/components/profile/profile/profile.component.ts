@@ -12,16 +12,14 @@ export class ProfileComponent implements OnInit {
 
   @Input() user: User;
 
-  @Output() updateData = new EventEmitter();
+  @Output() updatePersonalInformation = new EventEmitter();
 
-  isEditerMode: boolean = false;
+  isEditerMode: boolean;
 
-  constructor(
-    private userService: UserService,
-    private router: Router) { }
+  constructor() { }
 
   ngOnInit(): void {
-    console.dir('onInitLogin')
+    console.dir('onInitProfile')
     /* 
     this.userService.getUser().subscribe(result => {
       if (!result) {
@@ -33,18 +31,21 @@ export class ProfileComponent implements OnInit {
       error => {
       }) */
 
-    console.dir('onInitLoginEnd')
+    console.dir('onInitProfileEnd')
   }
 
 
   startEditing() {
+    console.log("start edit")
+    console.log(this.isEditerMode)
     this.isEditerMode = true;
-    console.dir(this.isEditerMode)
+    console.log(this.isEditerMode)
   }
 
   saveChanges() {
-    this.updateData.emit();
+    console.log("saveChanges")
+    this.updatePersonalInformation.emit();
 
-    this.isEditerMode = true;
+    this.isEditerMode = false;
   }
 }

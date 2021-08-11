@@ -30,6 +30,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                 var Cars = await _shopContext.Cars
                     .Include(car => car.CarModel)
                     .ThenInclude(model => model.CarBrand)
+                    .Include(car => car.CartsCars)
                     .ToListAsync();
 
                 return Cars;
@@ -123,6 +124,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                 var car = await _shopContext.Cars
                     .Include(car => car.CarModel)
                     .ThenInclude(model => model.CarBrand)
+                    .Include(car => car.CartsCars)
                     .FirstOrDefaultAsync(car => car.Id == id);
 
                 return car;

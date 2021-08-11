@@ -21,8 +21,8 @@ export class UserService {
     return this.http.put<User>(`${this.url}`, user);
   }
 
-  DeleteCarFromCart(cartId: number): Observable<Cart> {
-    return this.http.put<Cart>(`${this.url}UpdateCart`, cartId)
+  DeleteCarFromCart(carId: number): Observable<boolean> {
+    return this.http.put<boolean>(`${this.url}UpdateCart`, carId)
   }
 
   getAll(): Observable<User[]> {

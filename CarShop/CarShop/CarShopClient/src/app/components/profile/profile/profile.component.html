@@ -7,30 +7,32 @@
 
         <mat-form-field class="example-full-width">
             <mat-label>Имя пользователя</mat-label>
-            <input [disabled]='!isInEditing' matInput [(ngModel)]='user.name'>
+            <input [disabled]='!isEditerMode' matInput [(ngModel)]='user.name'>
         </mat-form-field>
 
         <mat-form-field class="example-full-width">
             <mat-label>Возраст</mat-label>
-            <input [disabled]='!isInEditing' matInput [(ngModel)]='user.age'>
+            <input [disabled]='!isEditerMode' matInput [(ngModel)]='user.age'>
         </mat-form-field>
 
         <mat-form-field class="example-full-width">
             <mat-label>Email</mat-label>
-            <input [disabled]='!isInEditing' matInput [(ngModel)]='user.email'>
+            <input [disabled]='!isEditerMode' matInput [(ngModel)]='user.email'>
         </mat-form-field>
 
         <mat-form-field class="example-full-width">
             <mat-label>Телефонный номер</mat-label>
-            <input [disabled]='!isInEditing' matInput [(ngModel)]='user.mobilePhoneNumber'>
+            <input [disabled]='!isEditerMode' matInput [(ngModel)]='user.mobilePhoneNumber'>
         </mat-form-field>
 
         <div class="buttons">
             <div class="cancel-button">
-                <button mat-stroked-button [disabled]='isInEditing' (click)='startEditing()'>Редактировать</button>
+                <button mat-stroked-button [disabled]='isEditerMode' 
+                (click)='startEditing()'>Редактировать</button>
             </div>
             <div class="submit-button">
-                <button mat-raised-button [disabled]='!isInEditing' (click)='saveChanges()'
+                <button mat-raised-button [disabled]='!isEditerMode' 
+                (click)='saveChanges()'
                     color="primary">Сохранить</button>
             </div>
         </div>

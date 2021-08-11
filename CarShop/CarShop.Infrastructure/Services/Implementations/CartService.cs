@@ -99,6 +99,11 @@ namespace CarShop.Infrastructure.Services.Implementations
                     .FirstOrDefaultAsync(user => user.Id == userId);
 
                 var car = await _carService.GetCarByIdAsync(newCarId);
+                
+                if(!(car.CartsCars.FirstOrDefault(car => car.CartId == helperUserWithTheCart.CartId) is null))
+                {
+                    return false;
+                }
 
                 if (car is null
                     || helperUserWithTheCart is null)
@@ -177,13 +182,11 @@ namespace CarShop.Infrastructure.Services.Implementations
             }
         }
 
-
-
-        public async Task<Cart> DeleteCarOutCartAsync(int newCarId, int userId)
+        public async Task<bool> DeleteCarOutCartAsync(int newCarId, int userId)
         {
             if (newCarId == 0 || userId == 0)
             {
-                return null;
+                return false;
             }
             try
             {
@@ -201,16 +204,16 @@ namespace CarShop.Infrastructure.Services.Implementations
 
                 if (carInCart is null)
                 {
-                    return null;
+                    return false;
                 }
-                // нужно сделать в юзер контроллере удаление машины из карзины если этот метод правильный
+
                 CartCar cartCar = helperUserWithCart.Cart.CartsCars.FirstOrDefault(cartcar => cartcar.Car == carInCart);
 
                 helperUserWithCart.Cart.CartsCars.Remove(cartCar);
 
                 await _shopContext.SaveChangesAsync();
 
-                return helperUserWithCart.Cart;
+                return true;
             }
             catch (Exception ex)
             {
@@ -219,7 +222,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                        nameof(AddNewCarInCartAsync),
                        $"Failed to delete car out cart for user (userId={userId})",
                        ex);
-                return null;
+                return false;
             }
         }
 

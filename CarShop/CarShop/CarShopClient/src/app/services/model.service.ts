@@ -9,6 +9,7 @@ import { CarModel } from '../models/CarModel';
 export class ModelService {
 
   private url = '/api/Model';
+  
   constructor(private http: HttpClient) { }
 
   GetAllModels(): Observable<CarModel[]> {

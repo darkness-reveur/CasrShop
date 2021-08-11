@@ -71,6 +71,7 @@ namespace CarShop.Controllers
         }
 
         [HttpPost]
+        [Route("CreateOrder")]
         public async Task<IActionResult> CreateOrder([FromBody] int cartId)
         {
             var order = await _orderService

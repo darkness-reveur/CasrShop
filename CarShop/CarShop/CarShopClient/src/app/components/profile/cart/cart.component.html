@@ -1,0 +1,25 @@
+<div *ngIf='cart'>
+    <mat-accordion>
+        <mat-expansion-panel>
+            <mat-expansion-panel-header class='title'>
+                <mat-panel-title>
+                    Корзина, Сумма для оплаты: {{supTotalPrice}}
+                </mat-panel-title>
+            </mat-expansion-panel-header>
+            <mat-list role="list">
+                <mat-list-item role="listitem">
+                    <button mat-button (click)='addOrder()' color='primary'>
+                        Создать заказ
+                    </button>
+                </mat-list-item>
+                <mat-list-item *ngFor='let CartCars of cart.cartCars; let f = index' role="listitem">
+                    {{f+1}}. Название: {{CartCars.carModel.carBrand.name}} {{CartCars.carModel.name}} Цена: {{CartCars.price}} BYN <button mat-button
+                        (click)='deleteCarFromCard(CartCars.id)' color='error'>Delete</button>
+                </mat-list-item>
+            </mat-list>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
+<div *ngIf='!cart' class="empty-cart">
+    Your cart is empty
+</div>

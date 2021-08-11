@@ -12,7 +12,6 @@ import { CarService } from './services/car.service';
 import { ModelService } from './services/model.service';
 import { BrandService } from './services/brand.service';
 import { UserService } from './services/user.service';
-import { CartService } from './services/cart.service';
 import { MaterialModule } from './material.module';
 import { NavBarComponent } from './components/nav-bar/nav-bar/nav-bar.component';
 import { ProfileComponent } from './components/profile/profile/profile.component';
@@ -20,7 +19,6 @@ import { HomeComponent } from './components/home/home.component';
 import { CartComponent } from './components/profile/cart/cart.component';
 import { OrderComponent } from './components/profile/order/order.component';
 import { ProductDialogComponent } from './components/dialog/product-dialog/product-dialog.component';
-import { UserDialogComponent } from './components/dialog/user-dialog/user-dialog.component';
 import { ProfileMainComponent } from './components/profile/profile-main.component';
 
 @NgModule({
@@ -31,12 +29,10 @@ import { ProfileMainComponent } from './components/profile/profile-main.componen
     NavBarComponent,
     ProfileComponent,
     HomeComponent,
+    ProductDialogComponent,
     CartComponent,
     OrderComponent,
-    ProductDialogComponent,
-    UserDialogComponent,
-    ProfileMainComponent,
-
+    ProfileMainComponent
   ],
   imports: [
     BrowserModule,
@@ -54,7 +50,6 @@ import { ProfileMainComponent } from './components/profile/profile-main.componen
     ModelService,
     BrandService,
     UserService,
-    CartService
   ],
   bootstrap: [AppComponent]
 })

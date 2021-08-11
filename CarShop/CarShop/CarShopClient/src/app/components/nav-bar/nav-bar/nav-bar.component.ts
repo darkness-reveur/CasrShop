@@ -67,7 +67,9 @@ export class NavBarComponent implements OnInit {
   }
 
   goToProfile() {
+    console.dir('startGoToProfile')
     this.router.navigateByUrl('/profile');
+    console.dir('endGoToProfile')
   }
 
   goToHome() {
