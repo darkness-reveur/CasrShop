@@ -1,4 +1,5 @@
 ﻿using CarShop.Common.Models;
+using CarShop.Common.Models.Enums;
 using CarShop.Infrastructure.Services.Interfacies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -8,7 +9,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using static CarShop.Common.Models.User;
 
 namespace CarShop.Controllers
 {
@@ -46,6 +46,22 @@ namespace CarShop.Controllers
             }
 
             var orders = await _orderService.GerAllUserOrdersAsync(userId);
+
+
+            if (orders is null)
+            {
+                return BadRequest();
+            }
+
+            return Ok(orders);
+        }
+
+        [HttpGet]
+        [Route("GetAllUserOrders")]
+        [Authorize]
+        public async Task<ActionResult> GetAllNotApprovedOrders()
+        {
+            var orders = await _orderService.GetAllNotApprovedOrders();
 
 
             if (orders is null)

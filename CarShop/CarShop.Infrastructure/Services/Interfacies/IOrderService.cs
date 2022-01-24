@@ -17,6 +17,8 @@ namespace CarShop.Infrastructure.Services.Interfacies
 
         public Task<Order> CreateOrderAsync(int cartId);
 
+        public Task<IEnumerable<Order>> GetAllNotApprovedOrders();
+
         public Task<Order> ApproveOrderAsync(int orderId);
 
         public Task<bool> DeleteOrderDyIdAsync(int orderId); 

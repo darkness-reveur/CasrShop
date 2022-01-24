@@ -12,27 +12,8 @@
         </li>
       </ul>
       <ul class="nav nav-pills">
-        <li class="nav-item">
-          <div *ngIf="loggedIn">
-            <span class="title-right">
-              <button mat-button (click)='goToOrder()'>
-                orders
-              </button>
-            </span>
-          </div>
-        </li>
-        <li class="nav-item">
-          <div *ngIf="loggedIn">
-            <span class="title-right">
-              <button mat-button (click)='goToCart()'>
-                <mat-icon>
-                  shopping_cart
-                </mat-icon>
-                Shop Cart
-              </button>
-            </span>
-          </div>
-        </li>
+        
+        
         <li class="nav-item">
           <div *ngIf="!loggedIn; else loggetOut">
             <span class="title-right">

@@ -1,15 +1,11 @@
-﻿using CarShop.Common.Helpers;
-using CarShop.Common.Models;
+﻿using CarShop.Common.Models;
+using CarShop.Common.Models.Enums;
 using CarShop.Infrastructure.Services.Interfacies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using static CarShop.Common.Models.User;
 
 namespace CarShop.Controllers
 {

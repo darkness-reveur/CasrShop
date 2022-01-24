@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarShop.Common.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -28,10 +29,5 @@ namespace CarShop.Common.Models
 
         public virtual List<Car> Cars { get; set; }
 
-        public enum OrderStatuses
-        {
-            InProgress,
-            Paid
-        }
     }
 }

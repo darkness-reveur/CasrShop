@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using CarShop.Common.Models.Enums;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -40,20 +41,5 @@ namespace CarShop.Common.Models
         public virtual CarModel CarModel { get; set; }
 
         public List<CartCar> CartsCars { get; set; }
-
-        public enum EngineTypes
-        {
-            PetrolEngine,
-            DieselEngine,
-            ElectroEngine
-        }
-
-        public enum WheelDrives
-        {
-            FrontWheelDrive,
-            RealWheelDrive,
-            AllWheelDrive,
-            PlugInAllWheelDrive
-        }
     }
 }

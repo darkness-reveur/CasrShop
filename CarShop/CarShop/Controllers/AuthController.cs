@@ -1,19 +1,19 @@
 ﻿using CarShop.Common.Helpers;
 using CarShop.Common.Models;
 using CarShop.Common.Models.AuthenticationModels;
+using CarShop.Common.Models.Enums;
 using CarShop.Infrastructure.Services.AuthenticationService;
 using CarShop.Infrastructure.Services.Interfacies;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using static CarShop.Common.Models.User;
 
 namespace CarShop.Controllers
 {
@@ -51,7 +51,7 @@ namespace CarShop.Controllers
         }
 
         [HttpPut]
-        public async Task<IActionResult> LogInAsync([FromBody] AccessDataEntity data)
+        public async Task<IActionResult> LogInAsync([FromBody] RegisterData data)
         {
             if (data.Login == null
                 && data.Password == null)
@@ -68,6 +68,7 @@ namespace CarShop.Controllers
             var user = await _authService.LogIn(
                     data.Login,
                     data.Password);
+
             if (user == null)
             {
                 _logger.LogWarning("Login data was incorrect");
@@ -75,9 +76,10 @@ namespace CarShop.Controllers
                 return Ok(false);
             }
 
-             await Authenticate(
-                user.Id.ToString(),
-                user.Role);
+            await Authenticate(
+                user.Id.ToString(), 
+                user.Role.ToString(), 
+                data.Login);
 
             _logger.LogInfo(
                 nameof(AuthController),
@@ -87,9 +89,7 @@ namespace CarShop.Controllers
             return Ok(true);
         }
 
-        private async Task Authenticate(
-            string userId,
-            UserRoles userRole)
+        private async Task Authenticate(string userId, string userRole, string userLogin)
         {
             var claims = new List<Claim>
             {
@@ -99,18 +99,23 @@ namespace CarShop.Controllers
 
                 new Claim(
                     ClaimsIdentity.DefaultRoleClaimType,
-                    userRole.ToString())
+                    userRole),
+
+                 new Claim(
+                     ClaimsIdentity.DefaultNameClaimType,
+                     userLogin),
+
             };
 
             ClaimsIdentity identity = new ClaimsIdentity(
                 claims,
-                "ApplicationCookie",
+                "Token",
                 ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);
 
-             await HttpContext.SignInAsync(
-                CookieAuthenticationDefaults.AuthenticationScheme,
-                new ClaimsPrincipal(identity));
+            await HttpContext.SignInAsync(
+               JwtBearerDefaults.AuthenticationScheme,
+               new ClaimsPrincipal(identity));
         }
 
         [HttpPost]
@@ -131,46 +136,35 @@ namespace CarShop.Controllers
                 return Ok(false);
             }
 
-            try
-            {
-                var user = await _userService
-                    .AddAsync(data.User);
+            var user = await _userService
+                .AddAsync(data.User);
 
-                await _authService.Register(
-                    data.Login,
-                    data.Password,
-                    user);
+            await _authService.Register(
+                data.Login,
+                data.Password,
+                user);
 
-                await Authenticate(
-                    user.Id.ToString(),
-                    user.Role);
+            await Authenticate(
+                user.Id.ToString(),
+                user.Role.ToString(),
+                data.Login);
 
-                return Ok(true);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogErrorByTemplate(
-                    nameof(AuthController),
-                    nameof(RegisterAsync),
-                    $"Authentication error",
-                    ex);
-
-                return BadRequest();
-            }
+            return Ok(true);
         }
 
         [HttpGet]
         [Route("LogOut")]
         public async Task<IActionResult> LogoutAsync()
         {
+            //Врядли работает на момент 09 11 2021
             try
             {
                 await HttpContext.SignOutAsync(
-                    CookieAuthenticationDefaults.AuthenticationScheme);
+                     JwtBearerDefaults.AuthenticationScheme);
 
                 return Ok(true);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogErrorByTemplate(
                     nameof(AuthController),

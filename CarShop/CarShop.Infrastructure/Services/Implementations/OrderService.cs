@@ -1,5 +1,6 @@
 ﻿using CarShop.Common.Helpers;
 using CarShop.Common.Models;
+using CarShop.Common.Models.Enums;
 using CarShop.Infrastructure.DataBase;
 using CarShop.Infrastructure.Services.Interfacies;
 using Microsoft.EntityFrameworkCore;
@@ -58,8 +59,8 @@ namespace CarShop.Infrastructure.Services.Implementations
                 var orders =await _shopContext.Orders
                     .Include(order => order.User)
                     .Include(order => order.Cars)
-                    .ThenInclude(cars => cars.CarModel)
-                    .ThenInclude(model => model.CarBrand)
+                        .ThenInclude(cars => cars.CarModel)
+                            .ThenInclude(model => model.CarBrand)
                     .ToListAsync();
 
                 return orders;
@@ -147,7 +148,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                 {
                     return null;
                 }
-                exOrder.OrderStatus = Order.OrderStatuses.Paid;
+                exOrder.OrderStatus = OrderStatuses.Paid;
                                 
                 await _shopContext.SaveChangesAsync();
 
@@ -192,7 +193,7 @@ namespace CarShop.Infrastructure.Services.Implementations
                 var order = new Order
                 {
                     Date = DateTime.Now,
-                    OrderStatus = Order.OrderStatuses.InProgress,
+                    OrderStatus = OrderStatuses.InProgress,
                     TotalAmount = totalPrice,
                     Cars = cars
                 };
@@ -215,6 +216,32 @@ namespace CarShop.Infrastructure.Services.Implementations
                   nameof(CreateOrderAsync),
                   $"Failed to add new order for user: {user.Name} with email: {user.Email}",
                   ex);
+                return null;
+            }
+        }
+
+        public async Task<IEnumerable<Order>> GetAllNotApprovedOrders()
+        {
+            try
+            {
+                var notApprovedOrders = _shopContext.Orders
+                    .Include(order => order.User)
+                    .Include(order => order.Cars)
+                        .ThenInclude(cars => cars.CarModel)
+                            .ThenInclude(models => models.CarBrand)
+                    .Where(order => order.OrderStatus == OrderStatuses.InProgress)
+                    .ToListAsync();
+
+                return await notApprovedOrders;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogErrorByTemplate(
+                    nameof(OrderService),
+                    nameof(GerAllUserOrdersAsync),
+                    $"Cannot get datas about Orders from database ",
+                    ex);
+
                 return null;
             }
         }

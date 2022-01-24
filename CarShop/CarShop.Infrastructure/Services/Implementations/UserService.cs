@@ -156,5 +156,13 @@ namespace CarShop.Infrastructure.Services.Implementations
                 return null;
             }
         }
+
+        public async Task<byte[]> GetUserSaltByLogin(string login)
+        {
+            var accessData = await _carShopContext.AccessData
+                .FirstOrDefaultAsync(data => data.Login == login);
+
+            return accessData.PasswordSalt; // опять же добавить в бд соль byte[]
+        }
     }
 }

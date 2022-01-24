@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CarShop.Common.Models.Enums;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -40,14 +41,5 @@ namespace CarShop.Common.Models
 
         [ForeignKey("CartId")]    
         public virtual Cart Cart { get; set; }
-        
-        
-        public enum UserRoles
-        {
-            Admin = 1,
-            AdminAssistant,
-            AuthorizedUser,
-            NotAuthorizedUser
-        }
     }
 }

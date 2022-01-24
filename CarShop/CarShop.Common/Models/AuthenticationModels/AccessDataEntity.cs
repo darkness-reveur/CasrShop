@@ -13,7 +13,10 @@ namespace CarShop.Common.Models.AuthenticationModels
         public string Login { get; set; }
 
         [Required]
-        public string Password { get; set; }
+        public byte[] PasswordSalt { get; set; }
+
+        [Required]
+        public byte[] Salt { get; set; }
 
         [Required]
         public int UserId { get; set; }
