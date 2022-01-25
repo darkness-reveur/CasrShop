@@ -1,5 +1,6 @@
 import { Car } from "./Car";
 import { Cart } from "./Cart";
+import { UserRoles } from "./enums/UserRoles";
 import { Order } from "./Order";
 
 export interface User {
@@ -24,9 +25,3 @@ export interface User {
     cart: Cart
 }
 
-export enum UserRoles {
-    Admin = 1,
-    AdminAssistant,
-    AuthorizedUser,
-    NotAuthorizedUser
-}

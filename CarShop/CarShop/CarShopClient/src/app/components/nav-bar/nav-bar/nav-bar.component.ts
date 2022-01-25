@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { AuthService } from 'src/app/auth/services/AuthServise';
-import { User, UserRoles } from 'src/app/models/user';
+import { User } from 'src/app/models/user';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -17,7 +17,6 @@ export class NavBarComponent implements OnInit {
   isUserAdmin: boolean = false
 
   constructor(
-    private dialog: MatDialog,
     private router: Router,
     private userService: UserService,
     private authService: AuthService) { }

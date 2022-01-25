@@ -1,4 +1,5 @@
 import { Car } from "./Car";
+import { OrderStatuses } from "./enums/OrderStatuses";
 import { User } from "./user";
 
 
@@ -18,7 +19,3 @@ export interface Order {
     cars: Car[]
 }
 
-export enum OrderStatuses {
-    InProgress,
-    Paid
-}

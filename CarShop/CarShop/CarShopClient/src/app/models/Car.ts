@@ -1,5 +1,7 @@
 import { CarModel } from "./CarModel";
 import { CartCar } from "./CartCar";
+import { EngineTypes } from "./enums/EngineTypes";
+import { WheelDrives } from "./enums/WheelDrives";
 import { User } from "./user";
 
 export interface Car {
@@ -28,14 +30,4 @@ export interface Car {
     engineType: EngineTypes
 }
 
-export enum EngineTypes {
-    PetrolEngine,
-    DieselEngine,
-    ElectroEngine
-}
-export enum WheelDrives {
-    FrontWheelDrive,
-    RealWheelDrive,
-    AllWheelDrive,
-    PlugInAllWheelDrive
-}
+

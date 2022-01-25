@@ -47,7 +47,7 @@ namespace CarShop.Controllers
             }
 
             return Ok(await _authService
-                .IsLoginFree(login));
+                .   IsLoginFree(login));
         }
 
         [HttpPut]
@@ -94,17 +94,17 @@ namespace CarShop.Controllers
             var claims = new List<Claim>
             {
                 new Claim(
-                    "userid",
-                    userId),
+                     ClaimsIdentity.DefaultNameClaimType,
+                     userLogin),
 
                 new Claim(
                     ClaimsIdentity.DefaultRoleClaimType,
                     userRole),
-
+                                               
+                 
                  new Claim(
-                     ClaimsIdentity.DefaultNameClaimType,
-                     userLogin),
-
+                    "userid",
+                    userId),
             };
 
             ClaimsIdentity identity = new ClaimsIdentity(
@@ -173,6 +173,11 @@ namespace CarShop.Controllers
                     ex);
                 return BadRequest();
             }
+        }
+
+        private ClaimsIdentity GetIdentinty(string login, string password)
+        {
+
         }
     }
 }

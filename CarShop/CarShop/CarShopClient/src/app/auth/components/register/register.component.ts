@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { UserRoles } from 'src/app/models/User';
 import { UserService } from 'src/app/services/user.service';
 import { RegisterData } from '../../models/registerData';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../services/AuthServise';
+import { UserRoles } from 'src/app/models/enums/UserRoles';
 
 @Component({
   selector: 'app-register',
