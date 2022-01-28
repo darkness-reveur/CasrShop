@@ -1,4 +1,5 @@
-﻿using CarShop.Common.Helpers;
+﻿using CarShop.Auth;
+using CarShop.Common.Helpers;
 using CarShop.Common.Models;
 using CarShop.Common.Models.AuthenticationModels;
 using CarShop.Common.Models.Enums;
@@ -10,8 +11,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
@@ -47,7 +50,7 @@ namespace CarShop.Controllers
             }
 
             return Ok(await _authService
-                .   IsLoginFree(login));
+                .IsLoginFree(login));
         }
 
         [HttpPut]
@@ -76,20 +79,35 @@ namespace CarShop.Controllers
                 return Ok(false);
             }
 
-            await Authenticate(
-                user.Id.ToString(), 
-                user.Role.ToString(), 
+            var now = DateTime.UtcNow;
+
+           var identity = Authenticate(
+                user.Id.ToString(),
+                user.Role.ToString(),
                 data.Login);
 
-            _logger.LogInfo(
-                nameof(AuthController),
-                nameof(LogInAsync),
-                $"User {user.Id} has been authenticated");
+            var jwt = new JwtSecurityToken(
+                    issuer: AuthOptions.Issuer,
+                    audience: AuthOptions.Audience,
+                    notBefore: now,
+                    claims: identity.Claims,
+                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LifeTime)),
+                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
 
-            return Ok(true);
+            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            var response = new
+            {
+                access_token = encodedJwt,
+                username = identity.Name
+            };
+
+            Response.Cookies.Append("Token", encodedJwt);
+
+            return Ok(response);
         }
 
-        private async Task Authenticate(string userId, string userRole, string userLogin)
+        private  ClaimsIdentity Authenticate(string userId, string userRole, string userLogin)
         {
             var claims = new List<Claim>
             {
@@ -100,8 +118,7 @@ namespace CarShop.Controllers
                 new Claim(
                     ClaimsIdentity.DefaultRoleClaimType,
                     userRole),
-                                               
-                 
+
                  new Claim(
                     "userid",
                     userId),
@@ -113,9 +130,11 @@ namespace CarShop.Controllers
                 ClaimsIdentity.DefaultNameClaimType,
                 ClaimsIdentity.DefaultRoleClaimType);
 
-            await HttpContext.SignInAsync(
-               JwtBearerDefaults.AuthenticationScheme,
-               new ClaimsPrincipal(identity));
+            //await HttpContext.SignInAsync(
+            //   JwtBearerDefaults.AuthenticationScheme,
+            //   new ClaimsPrincipal(identity));
+
+            return identity;
         }
 
         [HttpPost]
@@ -144,40 +163,30 @@ namespace CarShop.Controllers
                 data.Password,
                 user);
 
-            await Authenticate(
-                user.Id.ToString(),
-                user.Role.ToString(),
-                data.Login);
-
             return Ok(true);
         }
 
-        [HttpGet]
-        [Route("LogOut")]
-        public async Task<IActionResult> LogoutAsync()
-        {
-            //Врядли работает на момент 09 11 2021
-            try
-            {
-                await HttpContext.SignOutAsync(
-                     JwtBearerDefaults.AuthenticationScheme);
+        //[HttpGet]
+        //[Route("LogOut")]
+        //public async Task<IActionResult> LogoutAsync()
+        //{
+        //    //Врядли работает на момент 09 11 2021
+        //    try
+        //    {
+        //        await HttpContext.SignOutAsync(
+        //             JwtBearerDefaults.AuthenticationScheme);
 
-                return Ok(true);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogErrorByTemplate(
-                    nameof(AuthController),
-                    nameof(LogoutAsync),
-                    $"LogOut error",
-                    ex);
-                return BadRequest();
-            }
-        }
-
-        private ClaimsIdentity GetIdentinty(string login, string password)
-        {
-
-        }
+        //        return Ok(true);
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        _logger.LogErrorByTemplate(
+        //            nameof(AuthController),
+        //            nameof(LogoutAsync),
+        //            $"LogOut error",
+        //            ex);
+        //        return BadRequest();
+        //    }
+        //}
     }
 }

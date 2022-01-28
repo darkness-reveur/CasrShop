@@ -17,8 +17,8 @@ export class AuthService {
         return this.http.post<boolean>(`${this.url}`, data);
     }
 
-    LogIn(data: LoginData): Observable<boolean> {
-        return this.http.put<boolean>(`${this.url}`, data);
+    LogIn(data: LoginData): Observable<any> {
+        return this.http.put<any>(`${this.url}`, data);
     }
 
     ChekUserLogin(login: string): Observable<boolean> {
