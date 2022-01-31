@@ -1,10 +1,8 @@
 using CarShop.Auth;
 using CarShop.Infrastructure.DataBase;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -12,9 +10,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace CarShop
@@ -47,6 +42,17 @@ namespace CarShop
                     });
             });
 
+            //////////////////////////////////
+            services.AddIdentityServer()
+                .AddDeveloperSigningCredential()
+                .AddInMemoryIdentityResources(AuthOptions.IdentityResources)
+                .AddInMemoryClients(AuthOptions.Clients)
+                .AddInMemoryApiResources(AuthOptions.Apis)
+                .AddTestUsers();
+
+            services.AddLocalApiAuthentication();
+            //////////////////////////////////
+
             services.AddDbContext<CarShopContext>(options =>
                 options.UseSqlServer(Configuration
                     .GetSection("ConnectionStrings")
@@ -68,30 +74,6 @@ namespace CarShop
                 configuration.RootPath = $"{AngularClientName}/dist";
             });
 
-            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                    .AddJwtBearer(options =>
-                    {
-                        options.RequireHttpsMetadata = false;
-                        options.TokenValidationParameters = new TokenValidationParameters
-                        {
-                            ValidateIssuer = true,
-                            ValidIssuer = AuthOptions.Issuer,
-                            ValidateAudience = true,
-                            ValidAudience = AuthOptions.Audience,
-                            ValidateLifetime = true,
-                            IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
-                            ValidateIssuerSigningKey = true,
-                        };
-
-                        options.Events = new JwtBearerEvents
-                        {
-                            OnMessageReceived = context =>
-                            {
-                                context.Token = context.Request.Cookies["Token"];
-                                return Task.CompletedTask;
-                            },
-                        };
-                    });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -118,10 +100,12 @@ namespace CarShop
 
             app.UseStaticFiles();
 
-            app.UseAuthentication();
+            app.UseIdentityServer();
 
-            app.UseAuthorization();
-            
+            //app.UseAuthentication();
+            app.UseIdentityServer();
+            //app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.

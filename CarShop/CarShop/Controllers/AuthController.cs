@@ -86,25 +86,7 @@ namespace CarShop.Controllers
                 user.Role.ToString(),
                 data.Login);
 
-            var jwt = new JwtSecurityToken(
-                    issuer: AuthOptions.Issuer,
-                    audience: AuthOptions.Audience,
-                    notBefore: now,
-                    claims: identity.Claims,
-                    expires: now.Add(TimeSpan.FromMinutes(AuthOptions.LifeTime)),
-                    signingCredentials: new SigningCredentials(AuthOptions.GetSymmetricSecurityKey(), SecurityAlgorithms.HmacSha256));
-
-            var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
-            var response = new
-            {
-                access_token = encodedJwt,
-                username = identity.Name
-            };
-
-            Response.Cookies.Append("Token", encodedJwt);
-
-            return Ok(response);
+            return Ok();
         }
 
         private  ClaimsIdentity Authenticate(string userId, string userRole, string userLogin)
